@@ -437,8 +437,891 @@
 
 ### Sección 5: Aplicación de consola interactiva - Tareas por hacer
 #### 42. Introducción a la sección
+#### 43. Temas puntuales de la sección
+#### 44. Demostración del objetivo final de la sección
+1. Crear **05-consola\package.json**:
+    ```js
+    {
+        "name": "04-tareas-hacer",
+        "version": "1.0.0",
+        "description": "",
+        "main": "index.js",
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1"
+        },
+        "keywords": [],
+        "author": "",
+        "license": "ISC"
+    }
+    ```
+    + Para crear de manera rapida, ejecutar:
+        + $ npm init -y
+2. Instalar dependencias a usar:
+    + $ npm i colors
+3. Crear **05-consola\app.js**:
+    ```js
+    require('colors')
+
+    const main = async() => {
+        console.log('Probando aplicación')
+    }
+
+    main()
+    ```
+
+#### 45. Inicio de proyecto - Tareas por hacer
+1. Crear **05-consola\helpers\mensajes.js**:
+    ```js
+    require('colors')
+
+    const mostrarMenu = () => {
+        console.clear();
+        console.log('=========================='.green);
+        console.log('  Seleccione una opción'.green);
+        console.log('==========================\n'.green);
+
+        console.log(`${ '1.'.green } Crear tarea`)
+        console.log(`${ '2.'.green } Listar tareas`)
+        console.log(`${ '3.'.green } Listar tareas completadas`)
+        console.log(`${ '4.'.green } Listar tareas pendientes`)
+        console.log(`${ '5.'.green } Completar tarea(s)`)
+        console.log(`${ '6.'.green } Borrar tarea`)
+        console.log(`${ '0.'.green } Salir \n`)
+
+        const readline = require('readline').createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        readline.question('Seleccione una opción: ', (opt) => {
+            readline.close()
+        })
+    }
+
+    const pausa = () => {
+        const readline = require('readline').createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+    
+        readline.question(`\nPresione ${ 'ENTER'.green } para continuar\n`, (opt) => {
+            readline.close()
+        })
+    }
+
+    module.exports = {
+        mostrarMenu,
+        pausa
+    }
+    ```
+2. Modificar **05-consola\app.js**:
+    ```js
+    require('colors')
+
+    const { mostrarMenu, pausa } = require('./helpers/mensajes')
+
+    const main = async() => {
+        console.log('Probando aplicación')
+        mostrarMenu ()
+    }
+
+    main()
+    ```
+
+#### 46. stdin - stdout - Readline
+#### 47. Repetir el menú de forma infinita
+1. Modificar **05-consola\helpers\mensajes.js**:
+    ```js
+    require('colors')
+
+    const mostrarMenu = () => {
+        return new Promise(resolve => {
+            console.clear();
+            console.log('=========================='.green);
+            console.log('  Seleccione una opción'.green);
+            console.log('==========================\n'.green);
+
+            console.log(`${ '1.'.green } Crear tarea`)
+            console.log(`${ '2.'.green } Listar tareas`)
+            console.log(`${ '3.'.green } Listar tareas completadas`)
+            console.log(`${ '4.'.green } Listar tareas pendientes`)
+            console.log(`${ '5.'.green } Completar tarea(s)`)
+            console.log(`${ '6.'.green } Borrar tarea`)
+            console.log(`${ '0.'.green } Salir \n`)
+
+            const readline = require('readline').createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+
+            readline.question('Seleccione una opción: ', (opt) => {
+                readline.close()
+                resolve(opt)
+            })
+        })
+    }
+
+    const pausa = () => {
+        return new Promise( resolve => {
+            const readline = require('readline').createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+        
+            readline.question(`\nPresione ${ 'ENTER'.green } para continuar\n`, (opt) => {
+                readline.close()
+                resolve()
+            })
+        })
+    }
+
+
+    module.exports = {
+        mostrarMenu,
+        pausa
+    }
+    ```
+2. Modificar **05-consola\app.js**:
+    ```js
+    require('colors')
+
+    const { mostrarMenu, pausa } = require('./helpers/mensajes')
+
+    const main = async() => {
+        do {
+            opt = await mostrarMenu()
+            console.log({opt})
+            if(opt !== '0') await pausa()
+        } while( opt !== '0' )
+    }
+
+    main()
+    ```
+
+#### 48. Nota para la siguiente clase:
++ **[Paquete inquirer npm](https://www.npmjs.com/package/inquirer)**
+
+#### 49. Construir el menú interactivo - Inquirer
+1. Instalar dependencia **inquirer**:
+    + $ npm i inquirer
+2. Crear **05-consola\helpers\inquirer.js**:
+    ```js
+    const inquirer = require('inquirer')
+    require('colors')
+
+    const preguntas = [
+        {
+            type: 'list',
+            name: 'opcion',
+            message: '¿Qué desea hacer?',
+            choices: ['opt1', 'opt2', 'opt3']
+        }
+    ]
+
+    const inquirerMenu = async() => {
+
+        console.clear()
+        console.log('=========================='.green)
+        console.log('  Seleccione una opción'.white )
+        console.log('==========================\n'.green)
+
+        const opcion = await inquirer.prompt(preguntas);
+
+        return opcion;
+    }
+
+    module.exports = {
+        inquirerMenu
+    }
+    ```
+3. Modificar **05-consola\app.js**:
+    ```js
+    require('colors')
+
+    const { inquirerMenu } = require('./helpers/inquirer')
+
+    const main = async() => {
+        do {
+            opt = await inquirerMenu()
+            console.log({opt})
+        } while( opt !== '0' )
+    }
+
+    main()
+    ```
+
+#### 50. Opciones del menú interactivo
+1. Modificar **05-consola\helpers\inquirer.js**:
+    ```js
+    const inquirer = require('inquirer')
+    require('colors')
+
+    const preguntas = [
+        {
+            type: 'list',
+            name: 'opcion',
+            message: '¿Qué desea hacer?',
+            choices: [
+                {
+                    value: '1',
+                    name: `${ '1.'.green } Crear tarea`
+                },
+                {
+                    value: '2',
+                    name: `${ '2.'.green } Listar tareas`
+                },
+                {
+                    value: '3',
+                    name: `${ '3.'.green } Listar tareas completadas`
+                },
+                {
+                    value: '4',
+                    name: `${ '4.'.green } Listar tareas pendientes`
+                },
+                {
+                    value: '5',
+                    name: `${ '5.'.green } Completar tarea(s)`
+                },
+                {
+                    value: '6',
+                    name: `${ '6.'.green } Borrar tarea`
+                },
+                {
+                    value: '0',
+                    name: `${ '0.'.green } Salir`
+                }
+            ]
+        }
+    ]
+
+    const inquirerMenu = async() => {
+
+        console.clear()
+        console.log('=========================='.green)
+        console.log('  Seleccione una opción'.white )
+        console.log('==========================\n'.green)
+
+        const { opcion } = await inquirer.prompt(preguntas);
+
+        return opcion;
+    }
+
+    const pausa = async() => {
+        const question = [
+            {
+                type: 'input',
+                name: 'enter',
+                message: `Presione ${ 'enter'.green } para continuar`
+            }
+        ]
+        console.log('\n')
+        await inquirer.prompt(question)
+    }
+
+    module.exports = {
+        inquirerMenu,
+        pausa
+    }
+    ```
+2. Modificar **05-consola\app.js**:
+    ```js
+    require('colors')
+
+    const { inquirerMenu, 
+            pausa
+    } = require('./helpers/inquirer')
+
+    const main = async() => {
+        do {
+            opt = await inquirerMenu()
+            console.log({opt})
+            await pausa()
+        } while( opt !== '0' )
+    }
+
+    main()
+    ```
+
+#### 51. Lógica para el manejo de las tareas por hacer
+1. Instalar dependencia **uuid** para crear id unicos:
+    + $ npm i uuid
+2. Crear **05-consola\models\tarea.js**:
+    ```js
+    const { v4: uudiv4 } = require('uuid');
+
+    class Tarea {
+        id = ''
+        desc = ''
+        completadoEn = null
+
+        constructor( desc ) {
+            this.id = uudiv4()
+            this.desc = desc
+            this.completadoEn = null
+        }
+    }
+
+    module.exports = Tarea
+    ```
+3. Crear **05-consola\models\tareas.js**:
+    ```js
+    class Tareas {
+        _listado = {}
+
+        constructor() {
+            this._listado = {}
+        }
+    }
+
+    module.exports = Tareas;
+    ```
+4. Modificar **05-consola\app.js**:
+    ```js
+    require('colors')
+
+    const { inquirerMenu, 
+            pausa
+    } = require('./helpers/inquirer')
+
+    const Tarea = require('./models/tarea')
+    const Tareas = require('./models/tareas')
+
+    const main = async() => {
+        do {
+            //opt = await inquirerMenu()
+            //console.log({opt})
+            const tareas = new Tareas()
+            const tarea = new Tarea('Estudiar')
+            tareas._listado[tareas.id] = tarea
+            console.log(tareas)
+
+            await pausa()
+        } while( opt !== '0' )
+    }
+
+    main()
+    ```
+
+#### 52. Crear y listar tareas
+1. Modificar **05-consola\app.js**:
+    ```js
+    require('colors')
+
+    const { inquirerMenu, 
+            pausa,
+            leerInput
+    } = require('./helpers/inquirer')
+
+    const Tareas = require('./models/tareas')
+
+    const main = async() => {
+        let opt = '';
+        const tareas = new Tareas();
+
+        do {
+            opt = await inquirerMenu()
+            
+            switch (opt) {
+                case '1':   // crear opcion
+                    const desc = await leerInput('Descripción:')
+                    tareas.crearTarea(desc)
+                    break
+                case '2':
+                    //tareas.listadoCompleto()
+                    console.log(tareas._listado)
+                    break
+            }
+            await pausa()
+        } while( opt !== '0' )
+    }
+
+    main()
+    ```
+2. Modificar **05-consola\models\tareas.js**:
+    ```js
+    const Tarea = require('./tarea');
+
+    /**
+    *  _listado:
+    *      {  'uuid-123712-123123-2: { id:12, desc:asd,completadoeEN:92231 }  },
+    */
+
+    class Tareas {
+        _listado = {}
+
+        constructor() {
+            this._listado = {}
+        }
+
+        crearTarea(desc = '') {
+            const tarea = new Tarea(desc)
+            this._listado[tarea.id] = tarea
+        }
+    }
+
+    module.exports = Tareas
+    ```
+3. Modificar **05-consola\helpers\inquirer.js**:
+    ```js
+    const inquirer = require('inquirer')
+    require('colors')
+
+    const preguntas = [
+        {
+            type: 'list',
+            name: 'opcion',
+            message: '¿Qué desea hacer?',
+            choices: [
+                {
+                    value: '1',
+                    name: `${ '1.'.green } Crear tarea`
+                },
+                {
+                    value: '2',
+                    name: `${ '2.'.green } Listar tareas`
+                },
+                {
+                    value: '3',
+                    name: `${ '3.'.green } Listar tareas completadas`
+                },
+                {
+                    value: '4',
+                    name: `${ '4.'.green } Listar tareas pendientes`
+                },
+                {
+                    value: '5',
+                    name: `${ '5.'.green } Completar tarea(s)`
+                },
+                {
+                    value: '6',
+                    name: `${ '6.'.green } Borrar tarea`
+                },
+                {
+                    value: '0',
+                    name: `${ '0.'.green } Salir`
+                }
+            ]
+        }
+    ]
+
+    const inquirerMenu = async() => {
+        console.clear()
+        console.log('=========================='.green)
+        console.log('  Seleccione una opción'.white )
+        console.log('==========================\n'.green)
+
+        const { opcion } = await inquirer.prompt(preguntas);
+
+        return opcion;
+    }
+
+    const pausa = async() => {
+        const question = [
+            {
+                type: 'input',
+                name: 'enter',
+                message: `Presione ${ 'enter'.green } para continuar`
+            }
+        ]
+        console.log('\n')
+        await inquirer.prompt(question)
+    }
+
+    const leerInput = async( message ) => {
+        const question = [
+            {
+                type: 'input',
+                name: 'desc',
+                message,
+                validate(value) {
+                    if( value.length === 0 ) {
+                        return 'Por favor ingrese un valor'
+                    }
+                    return true
+                }
+            }
+        ]
+        const { desc } = await inquirer.prompt(question)
+        return desc
+    }
+
+    module.exports = {
+        inquirerMenu,
+        pausa,
+        leerInput
+    }
+    ```
+
+#### 53. Transformar objeto a un arreglo - Detalles estéticos
+#### 54. Guardar tareas en un archivo de texto
+1. Crear carpeta **05-consola\db**.
+
+#### 55. Leer nuestra base de datos
+1. Crear **05-consola\helpers\guardarArchivo.js**:
+    ```js
+    const fs = require('fs')
+
+    const archivo = './db/data.json'
+
+    const guardarDB = ( data ) => {
+        fs.writeFileSync( archivo, JSON.stringify(data) )
+    }
+
+    const leerDB = () => {
+        if( !fs.existsSync(archivo) ){
+            return null;
+        }
+        
+        const info = fs.readFileSync(archivo, { encoding: 'utf-8' })
+        const data = JSON.parse( info )
+        console.log(data);
+
+        return data
+    }
+
+    module.exports = {
+        guardarDB,
+        leerDB
+    }
+    ```
+
+#### 56. Tarea - Cargar tareas
+#### 57. Listar tareas
+#### 58. Tareas completadas y pendientes - opciones del menú
+#### 59. Listado para borrar
+#### 60. Confirmar y borrar tarea
+#### 61. Múltiples selecciones
+1. Modificar **05-consola\app.js**:
+    ```js
+    require('colors')
+
+    const { guardarDB, leerDB } = require('./helpers/guardarArchivo')
+
+    const { inquirerMenu, 
+            pausa,
+            leerInput,
+            listadoTareasBorrar,
+            confirmar,
+            mostrarListadoChecklist
+    } = require('./helpers/inquirer')
+
+    const Tareas = require('./models/tareas')
+
+    const main = async() => {
+        let opt = '';
+        const tareas = new Tareas()
+
+        const tareasDB = leerDB()
+        if ( tareasDB ) { // cargar tareas
+            tareas.cargarTareasFromArray( tareasDB );
+        }
+
+        do {
+            opt = await inquirerMenu()
+            
+            switch (opt) {
+                case '1':   // crear opcion
+                    const desc = await leerInput('Descripción:')
+                    tareas.crearTarea(desc)
+                    break
+                case '2':
+                    tareas.listadoCompleto()
+                    break
+                case '3':   // listar completadas
+                    tareas.listarPendientesCompletadas(true)
+                    break
+                case '4': // listar pendientes
+                    tareas.listarPendientesCompletadas(false)
+                    break
+                case '5': // completado | pendiente
+                    const ids = await mostrarListadoChecklist( tareas.listadoArr )
+                    tareas.toggleCompletadas( ids )
+                    break         
+                case '6': // Borrar
+                    const id = await listadoTareasBorrar( tareas.listadoArr );
+                    if ( id !== '0' ) {
+                        const ok = await confirmar('¿Está seguro?');
+                        if ( ok ) {
+                            tareas.borrarTarea( id );
+                            console.log('Tarea borrada');
+                        }
+                    }
+                    break
+            }
+
+            guardarDB( tareas.listadoArr );
+
+            await pausa()
+        } while( opt !== '0' )
+    }
+
+    main()
+    ```
+#### 62. Marcar como completadas o pendientes las tareas
+1. Modificar **05-consola\models\tareas.js**:
+    ```js
+    const Tarea = require('./tarea');
+
+    /**
+    *  _listado:
+    *      {  'uuid-123712-123123-2: { id:12, desc:asd,completadoeEN:92231 }  },
+    */
+
+    class Tareas {
+        _listado = {}
+
+        get listadoArr() {
+            const listado = []
+            Object.keys(this._listado).forEach( key => {
+                const tarea = this._listado[key]
+                listado.push(tarea)
+            })
+            return listado;
+        }
+
+        constructor() {
+            this._listado = {}
+        }
+
+        borrarTarea( id = '' ) {
+            if ( this._listado[id] ) {
+                delete this._listado[id]
+            }
+        }
+
+        cargarTareasFromArray( tareas = [] ) {
+            tareas.forEach( tarea => {
+                this._listado[tarea.id] = tarea
+            })
+        }
+
+        crearTarea(desc = '') {
+            const tarea = new Tarea(desc)
+            this._listado[tarea.id] = tarea
+        }
+
+        listadoCompleto() {
+            console.log()
+            this.listadoArr.forEach( (tarea, i) => {
+                const idx = `${i + 1}`.green
+                const { desc, completadoEn } = tarea
+                const estado = ( completadoEn ) 
+                                    ? 'Completada'.green
+                                    : 'Pendiente'.red
+                console.log(`${ idx } ${ desc } :: ${ estado }`)
+            })      
+        }
+
+        listarPendientesCompletadas( completadas = true ) {
+            console.log()
+            let contador = 0
+            this.listadoArr.forEach( tarea => {
+                const { desc, completadoEn } = tarea
+                const estado = ( completadoEn ) 
+                                    ? 'Completada'.green
+                                    : 'Pendiente'.red
+                if ( completadas ) {
+                    // mostrar completadas
+                    if ( completadoEn ) {
+                        contador += 1
+                        console.log(`${ (contador + '.').green } ${ desc } :: ${ completadoEn.green }`)
+                    }
+                } else {
+                    // mostrar pendientes
+                    if ( !completadoEn ) {
+                        contador += 1
+                        console.log(`${ (contador + '.').green } ${ desc } :: ${ estado }`)
+                    }
+                }
+            })   
+        }
+
+        toggleCompletadas( ids = [] ) {
+            ids.forEach( id => {
+                const tarea = this._listado[id];
+                if ( !tarea.completadoEn ) {
+                    tarea.completadoEn = new Date().toISOString()
+                }
+            })
+
+            this.listadoArr.forEach( tarea => {
+                if ( !ids.includes(tarea.id) ) {
+                    this._listado[tarea.id].completadoEn = null
+                }
+            })
+        }
+    }
+
+    module.exports = Tareas
+    ```
+2. Modificar **05-consola\helpers\inquirer.js**:
+    ```js
+    const inquirer = require('inquirer')
+    require('colors')
+
+    const preguntas = [
+        {
+            type: 'list',
+            name: 'opcion',
+            message: '¿Qué desea hacer?',
+            choices: [
+                {
+                    value: '1',
+                    name: `${ '1.'.green } Crear tarea`
+                },
+                {
+                    value: '2',
+                    name: `${ '2.'.green } Listar tareas`
+                },
+                {
+                    value: '3',
+                    name: `${ '3.'.green } Listar tareas completadas`
+                },
+                {
+                    value: '4',
+                    name: `${ '4.'.green } Listar tareas pendientes`
+                },
+                {
+                    value: '5',
+                    name: `${ '5.'.green } Completar tarea(s)`
+                },
+                {
+                    value: '6',
+                    name: `${ '6.'.green } Borrar tarea`
+                },
+                {
+                    value: '0',
+                    name: `${ '0.'.green } Salir`
+                }
+            ]
+        }
+    ]
+
+    const inquirerMenu = async() => {
+        console.clear()
+        console.log('=========================='.green)
+        console.log('  Seleccione una opción'.white )
+        console.log('==========================\n'.green)
+
+        const { opcion } = await inquirer.prompt(preguntas);
+
+        return opcion;
+    }
+
+    const pausa = async() => {
+        const question = [
+            {
+                type: 'input',
+                name: 'enter',
+                message: `Presione ${ 'enter'.green } para continuar`
+            }
+        ]
+        console.log('\n')
+        await inquirer.prompt(question)
+    }
+
+    const leerInput = async( message ) => {
+        const question = [
+            {
+                type: 'input',
+                name: 'desc',
+                message,
+                validate(value) {
+                    if( value.length === 0 ) {
+                        return 'Por favor ingrese un valor'
+                    }
+                    return true
+                }
+            }
+        ]
+        const { desc } = await inquirer.prompt(question)
+        return desc
+    }
+
+    const listadoTareasBorrar = async( tareas = [] ) => {
+        const choices = tareas.map( (tarea, i) => {
+            const idx = `${i + 1}.`.green
+
+            return {
+                value: tarea.id,
+                name:  `${ idx } ${ tarea.desc }`
+            }
+        })
+
+        choices.unshift({
+            value: '0',
+            name: '0.'.green + ' Cancelar'
+        });
+
+        const preguntas = [
+            {
+                type: 'list',
+                name: 'id',
+                message: 'Borrar',
+                choices
+            }
+        ]
+
+        const { id } = await inquirer.prompt(preguntas)
+        return id
+    }
+
+    const confirmar = async(message) => {
+        const question = [
+            {
+                type: 'confirm',
+                name: 'ok',
+                message
+            }
+        ]
+
+        const { ok } = await inquirer.prompt(question)
+        return ok
+    }   
+
+    const mostrarListadoChecklist = async( tareas = [] ) => {
+        const choices = tareas.map( (tarea, i) => {
+            const idx = `${i + 1}.`.green;
+
+            return {
+                value: tarea.id,
+                name:  `${ idx } ${ tarea.desc }`,
+                checked: ( tarea.completadoEn ) ? true : false
+            }
+        })
+
+        const pregunta = [
+            {
+                type: 'checkbox',
+                name: 'ids',
+                message: 'Selecciones',
+                choices
+            }
+        ]
+
+        const { ids } = await inquirer.prompt(pregunta);
+        return ids
+    }
+
+    module.exports = {
+        inquirerMenu,
+        pausa,
+        leerInput,
+        listadoTareasBorrar,
+        confirmar,
+        mostrarListadoChecklist
+    }
+    ```
+
+#### 63. Código fuente de la sección
++ **Código fuente**: https://github.com/Klerith/node-console-app-todo/releases/tag/v0.5.0
+
+
+### Sección 6: Aplicación de Clima - GeoLaction + OpenWeatherMaps
+#### 64. Inicio de sección
 2 min
 Iniciar
+
 
 
 
@@ -456,132 +1339,74 @@ Iniciar
 
 
 
-#### 43. Temas puntuales de la sección
-1 min
-Reproducir
-#### 44. Demostración del objetivo final de la sección
-4 min
-Reproducir
-#### 45. Inicio de proyecto - Tareas por hacer
-4 min
-Reproducir
-#### 46. stdin - stdout - Readline
-11 min
-Reproducir
-#### 47. Repetir el menú de forma infinita
-8 min
-Iniciar
-#### 48. Nota para la siguiente clase:
-1 min
-Reproducir
-#### 49. Construir el menú interactivo - Inquirer
-9 min
-Reproducir
-#### 50. Opciones del menú interactivo
-9 min
-Reproducir
-#### 51. Lógica para el manejo de las tareas por hacer
-12 min
-Reproducir
-#### 52. Crear y listar tareas
-12 min
-Reproducir
-#### 53. Transformar objeto a un arreglo - Detalles estéticos
-10 min
-Reproducir
-#### 54. Guardar tareas en un archivo de texto
-8 min
-Reproducir
-#### 55. Leer nuestra base de datos
-7 min
-Reproducir
-#### 56. Tarea - Cargar tareas
-6 min
-Reproducir
-#### 57. Listar tareas
-9 min
-Reproducir
-#### 58. Tareas completadas y pendientes - opciones del menú
-7 min
-Reproducir
-#### 59. Listado para borrar
-10 min
-Reproducir
-#### 60. Confirmar y borrar tarea
-7 min
-Reproducir
-#### 61. Múltiples selecciones
-6 min
-Reproducir
-#### 62. Marcar como completadas o pendientes las tareas
-9 min
-Iniciar
 
 
-### Sección 6: Aplicación de Clima - GeoLaction + OpenWeatherMaps
-63. Código fuente de la sección
+
+
+
+
+#### 65. Temas puntuales de la sección
 1 min
 Reproducir
-64. Inicio de sección
-2 min
-Iniciar
-65. Temas puntuales de la sección
-1 min
-Reproducir
-66. Demostración del objetivo final de la sección
+#### 66. Demostración del objetivo final de la sección
 2 min
 Reproducir
-67. Inicio de proyecto - ClimaApp
+#### 67. Inicio de proyecto - ClimaApp
 7 min
 Reproducir
-68. Menu de la aplicación
+#### 68. Menu de la aplicación
 5 min
 Reproducir
-69. Modelo para controlar la aplicación
+#### 69. Modelo para controlar la aplicación
 8 min
 Iniciar
-70. Enlaces para la siguiente clase
+#### 70. Enlaces para la siguiente clase
 1 min
 Reproducir
-71. Realizar peticiones HTTP desde Node
+#### 71. Realizar peticiones HTTP desde Node
 11 min
 Iniciar
-72. Enlaces para la próxima clase
+#### 72. Enlaces para la próxima clase
 1 min
 Reproducir
-73. Mapbox Search API y Token de acceso
+#### 73. Mapbox Search API y Token de acceso
 9 min
 Reproducir
-74. Crear instancias de Axios
+#### 74. Crear instancias de Axios
 6 min
 Reproducir
-75. Variables de entorno
+#### 75. Variables de entorno
 7 min
 Reproducir
-76. Listar los países de forma interactiva
+#### 76. Listar los países de forma interactiva
 11 min
 Reproducir
-77. OpenWeather - Información del clima
+#### 77. OpenWeather - Información del clima
 7 min
 Reproducir
-78. Obtener información del clima del lugar seleccionado
+#### 78. Obtener información del clima del lugar seleccionado
 4 min
 Reproducir
-79. Resolución de la tarea del clima
+#### 79. Resolución de la tarea del clima
 10 min
 Reproducir
-80. Persistencia en las búsquedas
+#### 80. Persistencia en las búsquedas
 9 min
 Reproducir
-81. Leer del archivo JSON
+#### 81. Leer del archivo JSON
 4 min
 Reproducir
-82. Resolución de la tarea - Leer archivo y capitalizar
+#### 82. Resolución de la tarea - Leer archivo y capitalizar
 7 min
 Iniciar
-83. Código fuente de la sección
+#### 83. Código fuente de la sección
 1 min
 Reproducir
+
+
+
+
+### Sección 7: Webserver - HTTP - EXPRESS - HBS
 84. Introducción a la sección
 2 min
 Iniciar
