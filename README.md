@@ -3,7 +3,7 @@
 + [URL del repositorio en GitHub](https://github.com/petrix12/nodejs2022.git)
 
 
-## Curso complementario: [JavaScript: Desde cero con NodeJS](99-node\README2.md)
+## Curso complementario: [JavaScript: Desde cero con NodeJS](99-node\README.md)
 
 
 ## Antes de iniciar:
