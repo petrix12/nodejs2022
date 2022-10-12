@@ -1322,10 +1322,34 @@
 
 ### Sección 6: Aplicación de Clima - GeoLaction + OpenWeatherMaps
 #### 64. Inicio de sección
-2 min
-Iniciar
+#### 65. Temas puntuales de la sección
+#### 66. Demostración del objetivo final de la sección
+#### 67. Inicio de proyecto - ClimaApp
+1. Crear **06-api-clima\package.json**.
+2. Crear **06-api-clima\index.js**.
+3. Crear **06-api-clima\helpers\inquirer.js**.
 
+#### 68. Menu de la aplicación
+1. Modificar **06-api-clima\helpers\inquirer.js**.
+2. Modificar **06-api-clima\index.js**.
 
+#### 69. Modelo para controlar la aplicación
+1. Crear **06-api-clima\models\busquedas.js**.
+2. Modificar **06-api-clima\index.js**.
+
+#### 70. Enlaces para la siguiente clase
++ [npm request (obsoleto)](https://www.npmjs.com/package/request): $ npm i request
++ [npm fetch](https://www.npmjs.com/package/fetch): $ npm i fetch
++ [npm axios](https://www.npmjs.com/package/axios): $ npm i axios
++ Para pruebas rápidas del endpoint: https://reqres.in
+
+#### 71. Realizar peticiones HTTP desde Node
+1. Modificar **06-api-clima\models\busquedas.js**.
+2. Modificar **06-api-clima\index.js**.
+
+#### 72. Enlaces para la próxima clase
+1 min
+Reproducir
 
 
 
@@ -1343,35 +1367,6 @@ Iniciar
 
 
 
-
-
-
-
-
-#### 65. Temas puntuales de la sección
-1 min
-Reproducir
-#### 66. Demostración del objetivo final de la sección
-2 min
-Reproducir
-#### 67. Inicio de proyecto - ClimaApp
-7 min
-Reproducir
-#### 68. Menu de la aplicación
-5 min
-Reproducir
-#### 69. Modelo para controlar la aplicación
-8 min
-Iniciar
-#### 70. Enlaces para la siguiente clase
-1 min
-Reproducir
-#### 71. Realizar peticiones HTTP desde Node
-11 min
-Iniciar
-#### 72. Enlaces para la próxima clase
-1 min
-Reproducir
 #### 73. Mapbox Search API y Token de acceso
 9 min
 Reproducir
@@ -1403,10 +1398,7 @@ Reproducir
 7 min
 Iniciar
 #### 83. Código fuente de la sección
-1 min
-Reproducir
-
-
++ **Cógigo fuente**: recursos\node-clima-app-main.zip
 
 
 ### Sección 7: Webserver - HTTP - EXPRESS - HBS
