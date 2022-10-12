@@ -1,6 +1,9 @@
 # Node: De cero a experto
-+ [URL del curso en Udemy](https://www.udemy.com/course/node-de-cero-a-experto/)
++ [URL del curso en Udemy](https://www.udemy.com/course/node-de-cero-a-experto)
 + [URL del repositorio en GitHub](https://github.com/petrix12/nodejs2022.git)
+
+
+## Curso complementario: [JavaScript: Desde cero con NodeJS](99-node\README2.md)
 
 
 ## Antes de iniciar:
