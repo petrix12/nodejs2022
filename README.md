@@ -1348,11 +1348,155 @@
 2. Modificar **06-api-clima\index.js**.
 
 #### 72. Enlaces para la próxima clase
-1 min
++ [mapbox](https://www.mapbox.com)
++ [mapbox doc Geocoding](https://docs.mapbox.com/api/search/geocoding)
+
+#### 73. Mapbox Search API y Token de acceso
++ Crear cuenta en [mapbox](https://www.mapbox.com)
+
+#### 74. Crear instancias de Axios
+#### 75. Variables de entorno
+#### 76. Listar los países de forma interactiva
+#### 77. OpenWeather - Información del clima
+#### 78. Obtener información del clima del lugar seleccionado
+#### 79. Resolución de la tarea del clima
+#### 80. Persistencia en las búsquedas
+#### 81. Leer del archivo JSON
+#### 82. Resolución de la tarea - Leer archivo y capitalizar
+#### 83. Código fuente de la sección
++ **Cógigo fuente**: recursos\node-clima-app-main.zip
+
+
+### Sección 7: Webserver - HTTP - EXPRESS - HBS
+#### 84. Introducción a la sección
+#### 85. Temas puntuales de la sección
+#### 86. Inicio de proyecto - WebServer
+1. Crear **06-api-clima\package.json**:
+    ```json
+    {
+        "name": "07-webserver",
+        "version": "1.0.0",
+        "description": "",
+        "main": "index.js",
+        "scripts": {
+            "start": "node server.js",
+            "nodemon": "nodemon server.js",
+            "test": "echo \"Error: no test specified\" && exit 1"
+        },
+        "author": "",
+        "license": "ISC",
+        "dependencies": {
+            "express": "^4.16.2",
+            "hbs": "^4.0.1"
+        }
+    }
+    ```
+2. Crear **07-webserver\app.js**:
+    ```js
+    const http = require('http')
+
+    http.createServer((req, res) => {
+        res.write('probando.......')
+        res.end()
+    }).listen(8081)
+
+    console.log(`Escuchando en http://localhost:8081/`)
+    ```
+
+#### 87. Request y Response
+1. Modificar **07-webserver\app.js**:
+    ```js
+    const http = require('http')
+
+    http.createServer((req, res) => {
+        //console.log(req)
+        res.setHeader('Content-Disposition', 'attachment', 'filename=lita.csv')
+        res.writeHead(200, {'Content-Type': /* 'text/plain' */ /* 'application/json' */ 'application/csv'})
+        //res.write('400 | Esta página el carrizo no fue encontrada')
+        /* const persona = {
+            id: 1,
+            nombre: 'Petrix'
+        }
+        res.write(JSON.stringify(persona)) */
+        res.write('id', 'nombre')
+        res.write('1', 'N1')
+        res.write('2', 'N2')
+        res.write('3', 'N3')
+        res.write('4', 'N4')
+        res.end()
+    }).listen(8081)
+
+    console.log(`Escuchando en http://localhost:8081`)
+    ```
+
+#### 88. Introducción a EXPRESS
+1. Modificar **07-webserver\app.js**:
+    ```js
+    const express = require('express')
+    const app = express()
+    const PORT = 8081
+
+    app.get('/', (req, res) => {
+        res.send('Página Principal')
+    })
+
+    app.get('/prueba', (req, res) => {
+        res.send('Hello World')
+    })
+
+    app.get('*', (req, res) => {
+        res.send('404 | Page not found')
+    })
+
+    app.listen(PORT)
+    ```
+
+#### 89. Servir contenido estático
+1. Crear **07-webserver\public\index.html**:
+    ```html
+    ```
+2. Modificar **07-webserver\app.js**:
+    ```js
+    ```
+
+#### 90. Servir un sitio web completo
+#### 91. Handlebars
++ **npm handlebars**: https://www.npmjs.com/package/handlebars
++ https://github.com/pillarjs/hbs
+
+#### 92. Argumentos desde el controlador
+#### 93. Usando parciales con HBS
+#### 94. Preparar Webserver para subirlo a un hosting
+#### 95. Heroku - Subiendo nuestra aplicación a producción
++ Principales servicios en donde se puede hostear un proyecto Node:
+    + [Firebase](https://firebase.google.com/docs/hosting?hl=es)
+    + [Azure](https://azure.microsoft.com/en-ca/free/search)
+    + [AWS](https://aws.amazon.com/es/free)
+    + [Google Cloud](https://cloud.google.com)
+    + [Digital Ocean](https://try.digitalocean.com/developerbrand)
+    + [Heroku](https://www.heroku.com)
+
+
+#### 96. Desplegando aplicaciones de Angular y React
++ https://www.npmjs.com/package/http-server
+
+#### 97. Subir los cambios a Heroku
+4 min
+Iniciar
+#### 98. Código fuente de la sección
++ **Código fuente**:
+    + GitHub: https://github.com/Klerith/curso-node-webserver
+    + Zip: recursos\webserver-express-1.0.0.zip
+
+
+### Sección 8: REST Server - Configuraciones iniciales
+#### 99. Introducción a la sección
+#### 100. Iniciando el proyecto - RESTServer
+6 min
 Reproducir
-
-
-
+#### 101. Express basado en clases
+8 min
+Reproducir
 
 
 
@@ -1365,130 +1509,44 @@ Reproducir
 
 
 
-
-
-#### 73. Mapbox Search API y Token de acceso
-9 min
-Reproducir
-#### 74. Crear instancias de Axios
-6 min
-Reproducir
-#### 75. Variables de entorno
-7 min
-Reproducir
-#### 76. Listar los países de forma interactiva
-11 min
-Reproducir
-#### 77. OpenWeather - Información del clima
-7 min
-Reproducir
-#### 78. Obtener información del clima del lugar seleccionado
-4 min
-Reproducir
-#### 79. Resolución de la tarea del clima
-10 min
-Reproducir
-#### 80. Persistencia en las búsquedas
-9 min
-Reproducir
-#### 81. Leer del archivo JSON
-4 min
-Reproducir
-#### 82. Resolución de la tarea - Leer archivo y capitalizar
+#### 102. Peticiones HTTP - GET - PUT - POST - DELETE
 7 min
 Iniciar
-#### 83. Código fuente de la sección
-+ **Cógigo fuente**: recursos\node-clima-app-main.zip
-
-
-### Sección 7: Webserver - HTTP - EXPRESS - HBS
-84. Introducción a la sección
-2 min
-Iniciar
-85. Temas puntuales de la sección
+#### 103. Códigos de respuestas HTTP
 1 min
 Reproducir
-86. Inicio de proyecto - WebServer
-8 min
-Reproducir
-87. Request y Response
-12 min
-Reproducir
-88. Introducción a EXPRESS
-7 min
-Reproducir
-89. Servir contenido estático
-8 min
-Reproducir
-90. Servir un sitio web completo
-7 min
-Reproducir
-91. Handlebars
-8 min
-Reproducir
-92. Argumentos desde el controlador
-4 min
-Reproducir
-93. Usando parciales con HBS
-11 min
-Reproducir
-94. Preparar Webserver para subirlo a un hosting
-8 min
-Reproducir
-95. Heroku - Subiendo nuestra aplicación a producción
-10 min
-Reproducir
-96. Desplegando aplicaciones de Angular y React
-8 min
-Reproducir
-97. Subir los cambios a Heroku
-4 min
-Iniciar
-98. Código fuente de la sección
-1 min
-Reproducir
-99. Introducción a la sección
-2 min
-Reproducir
-100. Iniciando el proyecto - RESTServer
+#### 104. Usando códigos de respuesta HTTP en Express
 6 min
 Reproducir
-101. Express basado en clases
-8 min
-Reproducir
-102. Peticiones HTTP - GET - PUT - POST - DELETE
-7 min
-Iniciar
-103. Códigos de respuestas HTTP
-1 min
-Reproducir
-104. Usando códigos de respuesta HTTP en Express
-6 min
-Reproducir
-105. CORS - Middleware
+#### 105. CORS - Middleware
 4 min
 Reproducir
-106. Separar las rutas y el controlador de la clase
+#### 106. Separar las rutas y el controlador de la clase
 14 min
 Reproducir
-107. Obtener datos de un POST
+#### 107. Obtener datos de un POST
 6 min
 Reproducir
-108. Parámetros de segmento y query
+#### 108. Parámetros de segmento y query
 8 min
 Reproducir
-109. Respaldo del RESTServer a GitHub
+#### 109. Respaldo del RESTServer a GitHub
 6 min
 Reproducir
-110. Subir el RESTServer a Heroku
+#### 110. Subir el RESTServer a Heroku
 6 min
 Reproducir
-111. Pro Tip: Ambiente de producción y desarrollo en Postman
+#### 111. Pro Tip: Ambiente de producción y desarrollo en Postman
 4 min
 Iniciar
-112. Código fuente de la sección
+#### 112. Código fuente de la sección
 1 min
 Reproducir
+
+
+
+
+### Sección 9: Alcances del RESTServer y mantenimiento de la colección de usuarios
 113. Introducción a la sección
 2 min
 Iniciar
