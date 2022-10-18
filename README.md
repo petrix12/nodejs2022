@@ -1,3 +1,15 @@
+<p align="center">
+    <a href="https://github.com/petrix12" target="_blank">
+        <img src="https://petrix12.github.io/cvpetrix2022/img/logo-completo-sm.png" width="400" alt="Soluciones++ Logo">
+    </a>
+</p>
+
+<p align="center">Proyectos desarrollados en Node.js</p>
+<p align="center">
+    <a href="https://nodejs.org/es"><img src="https://raw.githubusercontent.com/petrix12/cvpetrix2022/main/public/img/logos/nodejs.png" alt="Node.js" height="40"></a>
+    <a href="http://expressjs.com"><img src="https://raw.githubusercontent.com/petrix12/cvpetrix2022/main/public/img/logos/express.png" alt="Express" height="40"></a>
+</p>
+
 # Node: De cero a experto
 + [URL del curso en Udemy](https://www.udemy.com/course/node-de-cero-a-experto)
 + [URL del repositorio en GitHub](https://github.com/petrix12/nodejs2022.git)
@@ -1492,175 +1504,893 @@ Iniciar
 ### Sección 8: REST Server - Configuraciones iniciales
 #### 99. Introducción a la sección
 #### 100. Iniciando el proyecto - RESTServer
-6 min
-Reproducir
 #### 101. Express basado en clases
-8 min
-Reproducir
++ **Código de peticiones web**: recursos\http-response-codes.pdf
+
+#### 102. Peticiones HTTP - GET - PUT - POST - DELETEs
+#### 103. Códigos de respuestas HTTPs
+#### 104. Usando códigos de respuesta HTTP en Express
+#### 105. CORS - Middleware
+#### 106. Separar las rutas y el controlador de la clase
+#### 107. Obtener datos de un POST
+#### 108. Parámetros de segmento y query
+#### 109. Respaldo del RESTServer a GitHub
+#### 110. Subir el RESTServer a Heroku
+#### 111. Pro Tip: Ambiente de producción y desarrollo en Postman
+#### 112. Código fuente de la sección
++ **Código fuente**: 
+    + https://github.com/Klerith/curso-node-restserver/releases/tag/v1.0.0
+    + recursos\curso-node-restserver-1.0.0.zip
+
+
+### Sección 9: Alcances del RESTServer y mantenimiento de la colección de usuarios
+#### 113. Introducción a la seccións
+#### 114. Temas puntuales de la sección
+#### 115. Alcances del proyecto - RESTServer
+1. Login en MongoDB Atlas: 
+    + https://www.mongodb.com
+2. Crear usuario y cluster.
+3. Obtener cádena de conexión:
+    + mongodb+srv://user:*****@cluster0.hrqzg.mongodb.net/bd
+4. Crear **09-restserver-2\\.env**:
+    ```env
+    PORT=8082
+
+    USER=user_bd
+    PASS=password_bd
+    ```
+
+#### 116. Configuración de MongoDB - MongoAtlas
+1. Modificar **09-restserver-2\\.env**:
+    ```env
+    PORT=8082
+    MONGDB=mongodb+srv://user_db:password_bd@cluster0.hrqzg.mongodb.net/cafedb
+    ```
+2. Crear **09-restserver-2\controllers\usuarios.js:
+    ```js
+    const { response, request } = require('express')
+
+    const usuariosGet = (req = request, res = response) => {
+        const { q, nombre = 'No name', apikey, page = 1, limit } = req.query
+        res.json({
+            msg: 'get API - controlador',
+            q,
+            nombre,
+            apikey,
+            page, 
+            limit
+        })
+    }
+
+    const usuariosPost = (req, res = response) => {
+        const { nombre, edad } = req.body
+        res.json({
+            msg: 'post API - usuariosPost',
+            nombre, 
+            edad
+        })
+    }
+
+    const usuariosPut = (req, res = response) => {
+        const { id } = req.params;
+        res.json({
+            msg: 'put API - usuariosPut',
+            id
+        })
+    }
+
+    const usuariosPatch = (req, res = response) => {
+        res.json({
+            msg: 'patch API - usuariosPatch'
+        })
+    }
+
+    const usuariosDelete = (req, res = response) => {
+        res.json({
+            msg: 'delete API - usuariosDelete'
+        })
+    }
+
+    module.exports = {
+        usuariosGet,
+        usuariosPost,
+        usuariosPut,
+        usuariosPatch,
+        usuariosDelete
+    }
+    ```
+3. Crear **09-restserver-2\models\server.js**:
+    ```js
+    const express = require('express')
+    const cors = require('cors')
+
+    class Server {
+        constructor() {
+            this.app  = express()
+            this.port = process.env.PORT
+            this.usuariosPath = '/api/usuarios'
+
+            // Middlewares
+            this.middlewares();
+
+            // Rutas de mi aplicación
+            this.routes();
+        }
+
+        middlewares() {
+            // CORS
+            this.app.use( cors())
+
+            // Lectura y parseo del body
+            this.app.use( express.json() )
+
+            // Directorio Público
+            this.app.use( express.static('public'))
+        }
+
+        routes() {
+            this.app.use( this.usuariosPath, require('../routes/usuarios'))
+        }
+
+        listen() {
+            this.app.listen( this.port, () => {
+                console.log('Servidor corriendo en puerto', this.port )
+            });
+        }
+    }
+
+    module.exports = Server
+    ```
+4. Crear **09-restserver-2\public\index.html**:
+    ```js
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Acceso denegado</title>
+    </head>
+    <body>
+        <h1>Acceso Denegado</h1> 
+    </body>
+    </html>
+    ```
+5. Crear **09-restserver-2\routes\usuarios.js**:
+    ```js
+    const { Router } = require('express')
+
+    const { usuariosGet,
+            usuariosPut,
+            usuariosPost,
+            usuariosDelete,
+            usuariosPatch } = require('../controllers/usuarios')
+    const router = Router()
+
+    router.get('/', usuariosGet )
+    router.put('/:id', usuariosPut )
+    router.post('/', usuariosPost )
+    router.delete('/', usuariosDelete )
+    router.patch('/', usuariosPatch )
+
+    module.exports = router
+    ```
+6. Crear **09-restserver-2\app.js**:
+    ```js
+    require('dotenv').config()
+    const Server = require('./models/server')
+
+    const server = new Server()
+
+    server.listen()
+    ```
+7. Crear **09-restserver-2\package.json**:
+    ```json
+    {
+        "name": "07-restserver",
+        "version": "1.0.0",
+        "description": "",
+        "main": "index.js",
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1"
+        },
+        "keywords": [],
+        "author": "",
+        "license": "ISC",
+        "dependencies": {
+            "cors": "^2.8.5",
+            "dotenv": "^8.2.0",
+            "express": "^4.17.1"
+        }
+    }
+    ```
+8.  Levantar servidor:
+    + $ nodemon app
+
+#### 117. MongoDB Compass - Prueba de conexión
++ [mongoose](https://mongoosejs.com)
+1. Instalar dependencia mongoose:
+    + $ npm i mongoose
+2. Crear **09-restserver-2\database\config.js**:
+    ```js
+    const mongoose = require('mongoose')
+
+    const dbConnection = async() => {
+        try {
+            await mongoose.connect( process.env.MONGDB, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                // useCreateIndex: true,
+                // useFindAndModify: false
+            })
+            console.log('Base de datos online')
+        } catch (error) {
+            console.log(error)
+            throw new Error('Error a la hora de iniciar la base de datos')
+        }
+    }
+
+    module.exports = {
+        dbConnection
+    }
+    ```
+3. Modificar **09-restserver-2\models\server.js**:
+    ```js
+    ≡
+    const { dbConnection } = require('../database/config')
+
+    class Server {
+        constructor() {
+            this.app  = express()
+            this.port = process.env.PORT
+            this.usuariosPath = '/api/usuarios'
+
+            // Conectar a base de datos
+            this.conectarDB()
+            ≡
+        }
+
+        async conectarDB() {
+            await dbConnection()
+        }
+
+        middlewares() {
+            ≡
+        }
+        ≡
+    }
+    ≡
+    ```
+
+#### 118. Mongoose - Conectarnos a la base de datos
+#### 119. Modelo de Usuario
+1. Crear **09-restserver-2\models\usuario.js**:
+    ```js
+    const { Schema, model } = require('mongoose')
+
+    const UsuarioSchema = Schema({
+        nombre: {
+            type: String,
+            required: [true, 'El nombre es obligatorio']
+        },
+        correo: {
+            type: String,
+            required: [true, 'El correo es obligatorio'],
+            unique: true
+        },
+        password: {
+            type: String,
+            required: [true, 'La contraseña es obligatoria']
+        },
+        img: {
+            type: String
+        },
+        rol: {
+            type: String,
+            required: true,
+            emun: ['ADMIN_ROLE', 'USER_ROLE']
+        },
+        estado: {
+            type: Boolean,
+            default: true
+        },
+        google: {
+            type: Boolean,
+            default: false
+        }
+    })
+
+    module.exports = model( 'Usuario', UsuarioSchema )
+    ```
+
+#### 120. POST: Creando un usuario en la colección
+1. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    const { response, request } = require('express')
+    const Usuario = require('../models/usuario')
+
+    const usuariosGet = (req = request, res = response) => {
+        ≡
+    }
+
+    const usuariosPost = async (req, res = response) => {
+        const body = req.body
+        const usuario = new Usuario(body)
+        await usuario.save()
+
+        res.json({
+            usuario
+        })
+    }
+    ≡
+    ```
+
+#### 121. BcryptJS - Encriptando la contraseña
+1. Instalar dependencia bcryptjs:
+    + $ npm i bcryptjs
+2. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    const { response, request } = require('express')
+    const bcryptjs = require('bcryptjs')
+    const Usuario = require('../models/usuario')
+
+    const usuariosGet = (req = request, res = response) => {
+        ≡
+    }
+
+    const usuariosPost = async (req, res = response) => {
+        const { nombre, correo, password, rol } = req.body
+        const usuario = new Usuario({nombre, correo, password, rol})
+
+        // Verificar si el correo existe
+
+        // Encriptar password
+        const salt = bcryptjs.genSaltSync()
+        usuario.password = bcryptjs.hashSync(password, salt)
+
+        await usuario.save()
+
+        res.json({
+            msg: 'post API - usuariosPost',
+            usuario
+        })
+    }
+    ≡
+    ```
+
+#### 122. Validar campos obligatorios - Email
+1. Instalar dependencia:
+    + $ npm i express-validator
+2. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    const { response, request } = require('express')
+    const bcryptjs = require('bcryptjs')
+    const { validationResult } = require('express-validator')
+    const Usuario = require('../models/usuario')
+
+    const usuariosGet = (req = request, res = response) => {
+        ≡
+    }
+
+    const usuariosPost = async (req, res = response) => {
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            return res.status(400).json(errors)
+        }
+        const { nombre, correo, password, rol } = req.body
+        const usuario = new Usuario({nombre, correo, password, rol})
+
+        // Verificar si el correo existe
+        const existEmail = await Usuario.findOne({correo})
+        if (existEmail) {
+            return res.status(400).json({
+                msg: 'El correo ya está registrado'
+            })
+        }
+
+        // Encriptar password
+        ≡
+    }
+    ≡
+    ```
+3. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    ≡
+    const { Router } = require('express')
+    const { check } = require('express-validator')
+    ≡
+    router.post('/', [check('correo', 'El correo no es válido').isEmail()], usuariosPost )
+    ≡
+    ```
+
+#### 123. Validar todos los campos necesarios
+1. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    const { Router } = require('express')
+    const { check } = require('express-validator')
+    const { validarCampos } = require('../middlewares/validar-campos')
+    ≡
+    router.post('/', [
+        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+        check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
+        check('correo', 'El correo no es válido').isEmail(),
+        //check('correo').custom( emailExiste ),
+        check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
+        //check('rol').custom( esRoleValido ),
+        validarCampos
+    ], usuariosPost )
+    ≡
+    ```
+2. Crear **09-restserver-2\middlewares\validar-campos.js**:
+    ```js
+    const { validationResult } = require('express-validator')
+
+    const validarCampos = ( req, res, next ) => {
+        const errors = validationResult(req)
+        if( !errors.isEmpty() ){
+            return res.status(400).json(errors)
+        }
+        next()
+    }
+
+    module.exports = {
+        validarCampos
+    }
+    ```
+3. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    const { response, request } = require('express')
+    const bcryptjs = require('bcryptjs')
+    const Usuario = require('../models/usuario')
+
+    const usuariosGet = (req = request, res = response) => {
+        ≡
+    }
+
+    const usuariosPost = async (req, res = response) => {
+        const { nombre, correo, password, rol } = req.body
+        const usuario = new Usuario({nombre, correo, password, rol})
+
+        // Verificar si el correo existe
+        ≡
+    }
+    ≡
+    ```
+
+#### 124. Validar rol contra base de datos
+1. Crear colección **roles** en MongoDB, y en ella los siguientes documentos:
+    ```json
+    {
+        "rol": "ADMIN_ROLE"
+    }
+    ```
+    ```json
+    {
+        "rol": "USER_ROLE"
+    }
+    ```
+    ```json
+    {
+        "rol": "VENTAS_ROLE"
+    }
+    ```
+2. Crear modelo **09-restserver-2\models\role.js**:
+    ```js
+    const { Schema, model } = require('mongoose')
+
+    const RoleSchema = Schema({
+        rol: {
+            type: String,
+            required: [true, 'El rol es obligatorio']
+        }
+    })
+
+    module.exports = model( 'Role', RoleSchema )
+    ```
+3. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    const { Router } = require('express')
+    const { check } = require('express-validator')
+    const Role = require('../models/role')
+    const { validarCampos } = require('../middlewares/validar-campos')
+    ≡
+    router.post('/', [
+        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+        check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
+        check('correo', 'El correo no es válido').isEmail(),
+        check('rol').custom(async(rol = '') => {
+            const existeRol = await Role.findOne({rol})
+            if(!existeRol){
+                throw new Error(`El rol ${rol} no está registrado en la BD`)
+            }
+        }),
+        validarCampos
+    ], usuariosPost )
+    ≡
+    ```
+
+#### 125. Centralizar la validación del rol
+1. Crear **09-restserver-2\helpers\db-validators.js**:
+    ```js
+    const Role = require('../models/role')
+
+    const esRoleValido = async(rol = '') => {
+        const existeRol = await Role.findOne({ rol })
+        if ( !existeRol ) {
+            throw new Error(`El rol ${ rol } no está registrado en la BD`)
+        }
+    }
+
+    module.exports = {
+        esRoleValido
+    }
+    ```
+2. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    const { Router } = require('express')
+    const { check } = require('express-validator')
+    const { validarCampos } = require('../middlewares/validar-campos')
+    const { esRoleValido } = require('../helpers/db-validators')
+    ≡
+    router.post('/', [
+        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+        check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
+        check('correo', 'El correo no es válido').isEmail(),
+        check('rol').custom( esRoleValido ),
+        validarCampos
+    ], usuariosPost )
+    ≡
+    ```
+3. Modificar **09-restserver-2\models\usuario.js**:
+    ```js
+    const { Schema, model } = require('mongoose')
+
+    const UsuarioSchema = Schema({
+        nombre: {
+            type: String,
+            required: [true, 'El nombre es obligatorio']
+        },
+        correo: {
+            type: String,
+            required: [true, 'El correo es obligatorio'],
+            unique: true
+        },
+        password: {
+            type: String,
+            required: [true, 'La contraseña es obligatoria']
+        },
+        img: {
+            type: String
+        },
+        rol: {
+            type: String,
+            required: true,
+            emun: ['ADMIN_ROLE', 'USER_ROLE']
+        },
+        estado: {
+            type: Boolean,
+            default: true
+        },
+        google: {
+            type: Boolean,
+            default: false
+        }
+    })
+
+    UsuarioSchema.methods.toJSON = function() {
+        const { __v, password, ...usuario  } = this.toObject()
+        return usuario
+    }
+
+    module.exports = model( 'Usuario', UsuarioSchema )
+    ```
+
+#### 126. Tarea - Custom validation - EmailExiste
+1. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    ≡
+    const usuariosPost = async (req, res = response) => {
+        const { nombre, correo, password, rol } = req.body
+        const usuario = new Usuario({nombre, correo, password, rol})
+
+        // Encriptar password
+        const salt = bcryptjs.genSaltSync()
+        usuario.password = bcryptjs.hashSync(password, salt)
+
+        await usuario.save()
+
+        res.json({
+            msg: 'post API - usuariosPost',
+            usuario
+        })
+    }
+    ≡
+    ```
+2. Modificar **09-restserver-2\helpers\db-validators.js**:
+    ```js 
+    const Role = require('../models/role')
+    const Usuario = require('../models/usuario')
+
+    const esRoleValido = async(rol = '') => {
+        V
+    }
+
+    const emailExiste = async( correo = '' ) => {
+        // Verificar si el correo existe
+        const existeEmail = await Usuario.findOne({ correo })
+        if ( existeEmail ) {
+            throw new Error(`El correo: ${ correo }, ya está registrado`)
+        }
+    }
+
+    module.exports = {
+        esRoleValido,
+        emailExiste
+    }
+    ```
+3. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    ≡
+    const { esRoleValido, emailExiste } = require('../helpers/db-validators')
+    ≡
+    router.post('/', [
+        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+        check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
+        check('correo', 'El correo no es válido').isEmail(),
+        check('correo').custom( emailExiste ),
+        check('rol').custom( esRoleValido ),
+        validarCampos
+    ], usuariosPost )
+    ≡
+    ```
+
+#### 127. PUT: Actualizar información del usuario
+1. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    ≡
+    const usuariosPut = async(req, res = response) => {
+        const { id } = req.params;
+        const { password, google, correo, ...resto } = req.body
+
+        // TODO: validar contra BD
+        if(password){
+            const salt = bcryptjs.genSaltSync()
+            resto.password = bcryptjs.hashSync(password, salt)
+        }
+
+        const usuario = await Usuario.findByIdAndUpdate(id, resto)
+
+        res.json({
+            msg: 'put API - usuariosPut',
+            usuario
+        })
+    }
+    ≡
+    ```
+
+#### 128. Validaciones adicionales en el PUT
+1. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    ≡
+    const usuariosPut = async(req, res = response) => {
+        const { id } = req.params;
+        const { _id, password, google, correo, ...resto } = req.body
+
+        // TODO: validar contra BD
+        if(password){
+            const salt = bcryptjs.genSaltSync()
+            resto.password = bcryptjs.hashSync(password, salt)
+        }
+
+        const usuario = await Usuario.findByIdAndUpdate(id, resto)
+
+        res.json({
+            msg: 'put API - usuariosPut',
+            usuario
+        })
+    }
+    ≡
+    ```
+2. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    ≡
+    const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators')
+    ≡
+    router.put('/:id', [
+        check('id', 'No es un ID válido').isMongoId(),
+        check('id').custom( existeUsuarioPorId ),
+        check('rol').custom( esRoleValido ),
+        validarCampos
+    ], usuariosPut )
+    ≡
+    ```
+3. Modificar **09-restserver-2\helpers\db-validators.js**:
+    ```js
+    const Role = require('../models/role')
+    const Usuario = require('../models/usuario')
+
+    const esRoleValido = async(rol = '') => {
+        const existeRol = await Role.findOne({ rol })
+        if ( !existeRol ) {
+            throw new Error(`El rol ${ rol } no está registrado en la BD`)
+        }
+    }
+
+    const emailExiste = async( correo = '' ) => {
+        // Verificar si el correo existe
+        const existeEmail = await Usuario.findOne({ correo })
+        if ( existeEmail ) {
+            throw new Error(`El correo: ${ correo }, ya está registrado`)
+        }
+    }
+
+    const existeUsuarioPorId = async( id ) => {
+        // Verificar si el correo existe
+        const existeUsuario = await Usuario.findById(id)
+        if ( !existeUsuario ) {
+            throw new Error(`El id no existe ${ id }`)
+        }
+    }
+
+    module.exports = {
+        esRoleValido,
+        emailExiste,
+        existeUsuarioPorId
+    }
+    ```
+
+#### 129. GET: Obtener todos los usuarios de forma paginada
+1. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    ≡
+    const usuariosGet = async(req = request, res = response) => {
+        const { limit = 5, desde = 0 } = req.query
+        const usuarios = await Usuario.find()
+            .skip(Number(desde))
+            .limit(Number(limit))
+        res.json({
+            usuarios
+        })
+    }
+    ≡
+    ```
+
+#### 130. Retornar número total de registros en una colección
+1. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    ≡
+    const usuariosGet = async(req = request, res = response) => {
+        const { limit = 5, desde = 0 } = req.query
+        const query = {estado: true}
+
+        const [total, usuarios] = await Promise.all([
+            Usuario.countDocuments(query),
+            Usuario.find(query)
+                .skip(Number(desde))
+                .limit(Number(limit))
+        ])
+        res.json({
+            total, 
+            usuarios
+        })
+    }
+    ≡
+    ```
+
+#### 131. Delete: Borrando un usuario de la base de datos
+1. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    ≡
+    router.delete('/:id', [
+        check('id', 'No es un ID válido').isMongoId(),
+        check('id').custom( existeUsuarioPorId ),
+        validarCampos
+    ], usuariosDelete )
+    ≡
+    ```
+2. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    ≡
+    const usuariosDelete = async(req, res = response) => {
+        const { id } = req.params
+
+        // Borrado físico
+        // const usuario = await Usuario.findByIdAndDelete(id)
+
+        // Borrado lógico
+        const usuario = await Usuario.findByIdAndUpdate(id, { estado: false})
+
+        res.json(usuario)
+    }
+    ≡
+    ```
+
+#### 132. Desplegar RESTServer en Heroku
+#### 133. Variables de entorno personalizadas Heroku
+#### 134. Código fuente de la sección
++ **Código fuente**:
+    + https://github.com/Klerith/curso-node-restserver/releases/tag/v2.1.0
+    + recursos\curso-node-restserver-2.1.0.zip
+
+
+### Sección 10: Autenticación de usuario - JWT
+#### 135. Introducción a la sección
+3 min
+Iniciar
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
     ```js
+    ≡
+    ≡
     ```
 
 
 
 
-
-#### 102. Peticiones HTTP - GET - PUT - POST - DELETE
-7 min
-Iniciar
-#### 103. Códigos de respuestas HTTP
+#### 136. Temas puntuales de la sección
 1 min
 Reproducir
-#### 104. Usando códigos de respuesta HTTP en Express
-6 min
-Reproducir
-#### 105. CORS - Middleware
-4 min
-Reproducir
-#### 106. Separar las rutas y el controlador de la clase
-14 min
-Reproducir
-#### 107. Obtener datos de un POST
-6 min
-Reproducir
-#### 108. Parámetros de segmento y query
-8 min
-Reproducir
-#### 109. Respaldo del RESTServer a GitHub
-6 min
-Reproducir
-#### 110. Subir el RESTServer a Heroku
-6 min
-Reproducir
-#### 111. Pro Tip: Ambiente de producción y desarrollo en Postman
-4 min
-Iniciar
-#### 112. Código fuente de la sección
-1 min
-Reproducir
-
-
-
-
-### Sección 9: Alcances del RESTServer y mantenimiento de la colección de usuarios
-113. Introducción a la sección
-2 min
-Iniciar
-114. Temas puntuales de la sección
-1 min
-Reproducir
-115. Alcances del proyecto - RESTServer
-2 min
-Reproducir
-116. Configuración de MongoDB - MongoAtlas
-8 min
-Reproducir
-117. MongoDB Compass - Prueba de conexión
-5 min
-Reproducir
-118. Mongoose - Conectarnos a la base de datos
-9 min
-Reproducir
-119. Modelo de Usuario
-9 min
-Reproducir
-120. POST: Creando un usuario en la colección
-9 min
-Reproducir
-121. BcryptJS - Encriptando la contraseña
-8 min
-Reproducir
-122. Validar campos obligatorios - Email
-9 min
-Reproducir
-123. Validar todos los campos necesarios
-10 min
-Reproducir
-124. Validar rol contra base de datos
-9 min
-Reproducir
-125. Centralizar la validación del rol
-8 min
-Reproducir
-126. Tarea - Custom validation - EmailExiste
-5 min
-Reproducir
-127. PUT: Actualizar información del usuario
-12 min
-Reproducir
-128. Validaciones adicionales en el PUT
-8 min
-Reproducir
-129. GET: Obtener todos los usuarios de forma paginada
-10 min
-Reproducir
-130. Retornar número total de registros en una colección
-10 min
-Reproducir
-131. Delete: Borrando un usuario de la base de datos
-7 min
-Reproducir
-132. Desplegar RESTServer en Heroku
-5 min
-Reproducir
-133. Variables de entorno personalizadas Heroku
-10 min
-Iniciar
-134. Código fuente de la sección
-1 min
-Reproducir
-135. Introducción a la sección
-3 min
-Iniciar
-136. Temas puntuales de la sección
-1 min
-Reproducir
-137. Introducción a los Tokens
+#### 137. Introducción a los Tokens
 6 min
 Iniciar
-138. Código para leer el payload y fecha de expiración de un Token - NO USAR
+#### 138. Código para leer el payload y fecha de expiración de un Token - NO USAR
 1 min
 Reproducir
-139. Información importante sobre los JWT
+#### 139. Información importante sobre los JWT
 9 min
 Reproducir
-140. Crear ruta autenticación - Auth - Login
+#### 140. Crear ruta autenticación - Auth - Login
 9 min
 Reproducir
-141. Login de usuario
+#### 141. Login de usuario
 8 min
 Reproducir
-142. Generar un JWT
+#### 142. Generar un JWT
 9 min
 Reproducir
-143. Cambiar visualmente _id por uid en Mongoose
+#### 143. Cambiar visualmente _id por uid en Mongoose
 3 min
 Reproducir
-144. Proteger rutas mediante uso de Token - Middlewares
+#### 144. Proteger rutas mediante uso de Token - Middlewares
 12 min
 Reproducir
-145. Obtener la información del usuario autenticado
+#### 145. Obtener la información del usuario autenticado
 10 min
 Reproducir
-146. Middleware: Verificar Rol de administrador
+#### 146. Middleware: Verificar Rol de administrador
 7 min
 Reproducir
-147. Middleware: Tiene rol
+#### 147. Middleware: Tiene rol
 9 min
 Reproducir
-148. Optimizar importaciones en Node
+#### 148. Optimizar importaciones en Node
 5 min
 Reproducir
-149. Desplegar en Heroku
+#### 149. Desplegar en Heroku
 8 min
 Iniciar
-150. Código fuente de la sección
+#### 150. Código fuente de la sección
 1 min
 Reproducir
+
+
+
+### Sección 11: Google Sign in - Front y BackEnd
 151. Introducción a la sección
 2 min
 Iniciar
