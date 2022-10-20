@@ -2314,9 +2314,451 @@ Iniciar
 
 ### Sección 10: Autenticación de usuario - JWT
 #### 135. Introducción a la sección
-3 min
-Iniciar
+#### 136. Temas puntuales de la sección
+#### 137. Introducción a los Tokens
+#### 138. Código para leer el payload y fecha de expiración de un Token - NO USAR
++ Código para leer JWT: https://gist.github.com/Klerith/44ee5349fa13699d9c5f1e82b3be040e
+    ```js
+    function parseJwt (token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace('-', '+').replace('_', '/');
+        return JSON.parse(window.atob(base64));
+    };
+    ```
 
+#### 139. Información importante sobre los JWT
++ [JWT](https://jwt.io)
+
+#### 140. Crear ruta autenticación - Auth - Login
+1. Modificar **09-restserver-2\models\server.js**:
+    ```js
+    ≡
+    class Server {
+        constructor() {
+            ≡
+            this.usuariosPath = '/api/usuarios'
+            this.authPath = '/api/auth'
+            ≡
+        }
+        ≡
+        routes() {
+            this.app.use( this.authPath, require('../routes/auth'))
+            this.app.use( this.usuariosPath, require('../routes/usuarios'))
+        }
+        ≡
+    }
+
+    module.exports = Server
+    ≡
+    ```
+2. Crear **09-restserver-2\routes\auth.js**:
+    ```js
+    const { Router } = require('express')
+    const { check } = require('express-validator')
+    const { validarCampos } = require('../middlewares/validar-campos')
+    const { login } = require('../controllers/auth')
+    const router = Router()
+
+    router.post('/login',[
+        check('correo', 'El correo es obligatorio').isEmail(),
+        check('password', 'La contraseña es obligatoria').not().isEmpty(),
+        validarCampos
+    ],login )
+
+    module.exports = router
+    ```
+3. Crear **09-restserver-2\controllers\auth.js**:
+    ```js
+    ≡
+    const { response } = require('express')
+
+    const login = (req, res = response) => {
+        res.json({
+            msg: 'Login OK'
+        })  
+    }
+
+    module.exports = {
+        login
+    }
+    ≡
+    ```
+
+#### 141. Login de usuario
+1. Modificar **09-restserver-2\controllers\auth.js**:
+    ```js
+    const { response } = require('express')
+    const bcryptjs = require('bcryptjs')
+    const Usuario = require('../models/usuario')
+
+    const login = async(req, res = response) => {
+        const { correo, password } = req.body
+        try {
+            // Verificar si el email existe
+            const usuario = await Usuario.findOne({ correo });
+            if ( !usuario ) {
+                return res.status(400).json({
+                    msg: 'Usuario / Password no son correctos - correo'
+                })
+            }
+            // SI el usuario está activo
+            if ( !usuario.estado ) {
+                return res.status(400).json({
+                    msg: 'Usuario / Password no son correctos - estado: false'
+                })
+            }
+            // Verificar la contraseña
+            const validPassword = bcryptjs.compareSync( password, usuario.password );
+            if ( !validPassword ) {
+                return res.status(400).json({
+                    msg: 'Usuario / Password no son correctos - password'
+                })
+            }
+            res.json({
+                usuario,
+                /* token */
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                msg: 'Hable con el administrador'
+            })
+        }
+    }
+
+    module.exports = {
+        login
+    }
+    ```
+
+#### 142. Generar un JWT
+1. Instalar dependencia JWT:
+    + $ npm i jsonwebtoken
+2. Modificar **09-restserver-2\controllers\auth.js**:
+    ```js
+    const { response } = require('express')
+    const bcryptjs = require('bcryptjs')
+    const Usuario = require('../models/usuario')
+    const { generarJWT } = require('../helpers/generar-jwt')
+
+    const login = async(req, res = response) => {
+        const { correo, password } = req.body
+        try {
+            // Verificar si el email existe
+            const usuario = await Usuario.findOne({ correo });
+            if ( !usuario ) {
+                return res.status(400).json({
+                    msg: 'Usuario / Password no son correctos - correo'
+                })
+            }
+            // SI el usuario está activo
+            if ( !usuario.estado ) {
+                return res.status(400).json({
+                    msg: 'Usuario / Password no son correctos - estado: false'
+                })
+            }
+            // Verificar la contraseña
+            const validPassword = bcryptjs.compareSync( password, usuario.password );
+            if ( !validPassword ) {
+                return res.status(400).json({
+                    msg: 'Usuario / Password no son correctos - password'
+                })
+            }
+            // Generar el JWT
+            const token = await generarJWT( usuario.id )
+            res.json({
+                usuario,
+                token
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                msg: 'Hable con el administrador'
+            })
+        }
+    }
+
+    module.exports = {
+        login
+    }
+    ```
+3. Crear **09-restserver-2\helpers\generar-jwt.js**:
+    ```js
+    const jwt = require('jsonwebtoken')
+
+    const generarJWT = ( uid = '' ) => {
+        return new Promise( (resolve, reject) => {
+            const payload = { uid }
+            jwt.sign( payload, process.env.SECRETORPRIVATEKEY, {
+                expiresIn: '4h'
+            }, ( err, token ) => {
+                if ( err ) {
+                    console.log(err)
+                    reject( 'No se pudo generar el token' )
+                } else {
+                    resolve( token )
+                }
+            })
+        })
+    }
+
+    module.exports = {
+        generarJWT
+    }
+    ```
+4. Modificar **09-restserver-2\\.env**:
+    ```env
+    ≡
+    SECRETORPRIVATEKEY=EstaEsMiFirmaSecreta@88
+    ```
+
+#### 143. Cambiar visualmente _id por uid en Mongoose
+1. Modificar **09-restserver-2\models\usuario.js**:
+    ```js
+    ≡
+    UsuarioSchema.methods.toJSON = function() {
+        const { __v, password, _id, ...usuario  } = this.toObject()
+        usuario.uid = _id
+        return usuario
+    }
+    ≡
+    ```
+
+#### 144. Proteger rutas mediante uso de Token - Middlewares
+1. Crear **09-restserver-2\middlewares\validar-jwt.js**:
+    ```js
+    const { response, request } = require('express')
+    const jwt = require('jsonwebtoken')
+    const Usuario = require('../models/usuario')
+
+    const validarJWT = async( req = request, res = response, next ) => {
+        const token = req.header('x-token')
+        console.log( token )
+        if ( !token ) {
+            return res.status(401).json({
+                msg: 'No hay token en la petición'
+            })
+        }
+        try { 
+            const { uid } = jwt.verify( token, process.env.SECRETORPRIVATEKEY )
+            next()
+
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({
+                msg: 'Token no válido'
+            })
+        }
+    }
+
+    module.exports = {
+        validarJWT
+    }
+    ```
+2. Modificar **09-restserver-2\routes\auth.js**:
+    ```js
+    ≡
+    const { validarCampos } = require('../middlewares/validar-campos')
+    const { validarJWT } = require('../middlewares/validar-jwt')
+    ≡
+    router.post('/login',[
+        validarJWT,
+        check('correo', 'El correo es obligatorio').isEmail(),
+        check('password', 'La contraseña es obligatoria').not().isEmpty(),
+        validarCampos
+    ],login )
+    ≡
+    ```
+3. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    ≡
+    const { validarCampos } = require('../middlewares/validar-campos')
+    const { validarJWT } = require('../middlewares/validar-jwt')
+    ≡
+    router.delete('/:id', [
+        validarJWT,
+        check('id', 'No es un ID válido').isMongoId(),
+        check('id').custom( existeUsuarioPorId ),
+        validarCampos
+    ], usuariosDelete )
+    ≡
+    ```
+
+#### 145. Obtener la información del usuario autenticado
+1. Modificar **09-restserver-2\controllers\usuarios.js**:
+    ```js
+    ≡
+    const usuariosDelete = async(req, res = response) => {
+        const { id } = req.params
+
+        // Borrado lógico
+        const usuario = await Usuario.findByIdAndUpdate(id, { estado: false})
+        const usuarioAutenticado = req.usuario
+
+        res.json({usuario, usuarioAutenticado})
+    }
+    ≡
+    ```
+2. Modificar **09-restserver-2\middlewares\validar-jwt.js**:
+    ```js
+    ≡
+    const validarJWT = async( req = request, res = response, next ) => {
+        ≡
+        if ( !token ) {
+            ≡
+        }
+        try { 
+            const { uid } = jwt.verify( token, process.env.SECRETORPRIVATEKEY )
+
+            // leer el usuario que corresponde al uid
+            const usuario = await Usuario.findById( uid )
+            if( !usuario ) {
+                return res.status(401).json({
+                    msg: 'Token no válido - usuario no existe DB'
+                })
+            }
+
+            // Verificar si el uid tiene estado true
+            if ( !usuario.estado ) {
+                return res.status(401).json({
+                    msg: 'Token no válido - usuario con estado: false'
+                })
+            }
+            
+            req.usuario = usuario
+            next()
+
+        } catch (error) {
+            ≡
+        }
+    }
+    ≡
+    ```
+
+#### 146. Middleware: Verificar Rol de administrador
+1. Crear **09-restserver-2\middlewares\validar-roles.js**:
+    ```js
+    const { response } = require('express')
+
+    const esAdminRole = ( req, res = response, next ) => {
+        if ( !req.usuario ) {
+            return res.status(500).json({
+                msg: 'Se quiere verificar el role sin validar el token primero'
+            })
+        }
+
+        const { rol, nombre } = req.usuario
+        
+        if ( rol !== 'ADMIN_ROLE' ) {
+            return res.status(401).json({
+                msg: `${ nombre } no es administrador - No puede hacer esto`
+            })
+        }
+        next()
+    }
+
+    module.exports = {
+        esAdminRole
+    }
+    ```
+2. Modificard **09-restserver-2\routes\usuarios.js**:
+    ```js
+    ≡
+    const { validarCampos } = require('../middlewares/validar-campos')
+    const { validarJWT } = require('../middlewares/validar-jwt')
+    const { esAdminRole } = require('../middlewares/validar-roles')
+    ≡
+    router.delete('/:id', [
+        validarJWT,
+        esAdminRole,
+        check('id', 'No es un ID válido').isMongoId(),
+        check('id').custom( existeUsuarioPorId ),
+        validarCampos
+    ], usuariosDelete )
+    ≡
+    ```
+
+#### 147. Middleware: Tiene rol
+1. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    const { response } = require('express')
+
+    const esAdminRole = ( req, res = response, next ) => {
+        if ( !req.usuario ) {
+            return res.status(500).json({
+                msg: 'Se quiere verificar el role sin validar el token primero'
+            })
+        }
+
+        const { rol, nombre } = req.usuario
+        
+        if ( rol !== 'ADMIN_ROLE' ) {
+            return res.status(401).json({
+                msg: `${ nombre } no es administrador - No puede hacer esto`
+            })
+        }
+        next()
+    }
+
+    const tieneRole = ( ...roles  ) => {
+        return (req, res = response, next) => {
+            if ( !req.usuario ) {
+                return res.status(500).json({
+                    msg: 'Se quiere verificar el role sin validar el token primero'
+                })
+            }
+
+            if ( !roles.includes( req.usuario.rol ) ) {
+                return res.status(401).json({
+                    msg: `El servicio requiere uno de estos roles ${ roles }`
+                })
+            }
+            next()
+        }
+    }
+
+    module.exports = {
+        esAdminRole,
+        tieneRole
+    }
+    ```
+
+#### 148. Optimizar importaciones en Node
+1. Crear **09-restserver-2\middlewares\index.js**:
+    ```js
+    const validaCampos = require('../middlewares/validar-campos')
+    const validarJWT = require('../middlewares/validar-jwt')
+    const validaRoles = require('../middlewares/validar-roles')
+
+    module.exports = {
+        ...validaCampos,
+        ...validarJWT,
+        ...validaRoles,
+    }
+    ```
+2. Modificar **09-restserver-2\routes\usuarios.js**:
+    ```js
+    ≡
+    const { check } = require('express-validator')
+    const { validarCampos,
+            validarJWT,
+            esAdminRole, 
+            tieneRole } = require('../middlewares')
+    const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators')
+    ≡
+    ```
+
+#### 149. Desplegar en Heroku
+#### 150. Código fuente de la sección
++ **Código fuente**:
+    + https://github.com/Klerith/curso-node-restserver/releases/tag/v2.2.0
+    + recursos\curso-node-restserver-2.2.0.zip
+
+
+### Sección 11: Google Sign in - Front y BackEnd
+#### 151. Introducción a la sección
+2 min
+Iniciar
 
 
 
@@ -2341,92 +2783,42 @@ Iniciar
 
 
 
-
-#### 136. Temas puntuales de la sección
+#### 152. Temas puntuales de la sección
 1 min
-Reproducir
-#### 137. Introducción a los Tokens
-6 min
 Iniciar
-#### 138. Código para leer el payload y fecha de expiración de un Token - NO USAR
+#### 153. Link para comenzar la integración con Google Sign-in
 1 min
 Reproducir
-#### 139. Información importante sobre los JWT
-9 min
-Reproducir
-#### 140. Crear ruta autenticación - Auth - Login
-9 min
-Reproducir
-#### 141. Login de usuario
-8 min
-Reproducir
-#### 142. Generar un JWT
-9 min
-Reproducir
-#### 143. Cambiar visualmente _id por uid en Mongoose
-3 min
-Reproducir
-#### 144. Proteger rutas mediante uso de Token - Middlewares
-12 min
-Reproducir
-#### 145. Obtener la información del usuario autenticado
+#### 154. Generar API Key y API Secret de Google
 10 min
 Reproducir
-#### 146. Middleware: Verificar Rol de administrador
-7 min
+#### 155. Usuario de Google - Frontend
+8 min
 Reproducir
-#### 147. Middleware: Tiene rol
+#### 156. Ruta para manejar autenticación de Google
+8 min
+Reproducir
+#### 157. Validar Token de Google - Backend
 9 min
 Reproducir
-#### 148. Optimizar importaciones en Node
-5 min
-Reproducir
-#### 149. Desplegar en Heroku
-8 min
-Iniciar
-#### 150. Código fuente de la sección
-1 min
-Reproducir
-
-
-
-### Sección 11: Google Sign in - Front y BackEnd
-151. Introducción a la sección
-2 min
-Iniciar
-152. Temas puntuales de la sección
-1 min
-Iniciar
-153. Link para comenzar la integración con Google Sign-in
-1 min
-Reproducir
-154. Generar API Key y API Secret de Google
-10 min
-Reproducir
-155. Usuario de Google - Frontend
-8 min
-Reproducir
-156. Ruta para manejar autenticación de Google
-8 min
-Reproducir
-157. Validar Token de Google - Backend
-9 min
-Reproducir
-158. Crear un usuario personalizado con las credenciales de Google
+#### 158. Crear un usuario personalizado con las credenciales de Google
 7 min
 Reproducir
-159. Logout - Google Identity
+#### 159. Logout - Google Identity
 5 min
 Reproducir
-160. Publicar a Heroku - Google SignIn
+#### 160. Publicar a Heroku - Google SignIn
 5 min
 Reproducir
-161. Pro Tip: Generar la documentación automática de nuestros servicios
+#### 161. Pro Tip: Generar la documentación automática de nuestros servicios
 6 min
 Iniciar
-162. Código fuente de la sección
+#### 162. Código fuente de la sección
 1 min
 Reproducir
+
+
+### Sección 12: Categorías y Productos
 163. Introducción a la sección
 1 min
 Iniciar
