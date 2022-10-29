@@ -1,14 +1,16 @@
-<p align="center">
-    <a href="https://github.com/petrix12" target="_blank">
-        <img src="https://petrix12.github.io/cvpetrix2022/img/logo-completo-sm.png" width="400" alt="Soluciones++ Logo">
-    </a>
-</p>
-
-<p align="center">Proyectos desarrollados en Node.js</p>
-<p align="center">
-    <a href="https://nodejs.org/es"><img src="https://raw.githubusercontent.com/petrix12/cvpetrix2022/main/public/img/logos/nodejs.png" alt="Node.js" height="40"></a>
-    <a href="http://expressjs.com"><img src="https://raw.githubusercontent.com/petrix12/cvpetrix2022/main/public/img/logos/express.png" alt="Express" height="40"></a>
-</p>
+<div>
+    <p align="center">
+        <a href="https://github.com/petrix12" target="_blank">
+            <img src="https://petrix12.github.io/cvpetrix2022/img/logo-completo-sm.png" width="400" alt="Soluciones++ Logo">
+        </a>
+    </p>
+    <p align="center">Proyectos desarrollados en Node.js</p>
+    <p align="center">
+        <a href="https://nodejs.org/es"><img src="https://raw.githubusercontent.com/petrix12/cvpetrix2022/main/public/img/logos/nodejs.png" alt="Node.js" height="40"></a>
+        <a href="http://expressjs.com"><img src="https://raw.githubusercontent.com/petrix12/cvpetrix2022/main/public/img/logos/express.png" alt="Express" height="40"></a>
+        <a href="https://www.mongodb.com"><img src="https://raw.githubusercontent.com/petrix12/cvpetrix2022/main/public/img/logos/mongo.png" alt="MongoDB" height="40"></a>
+    </p>
+</div>
 
 # Node: De cero a experto
 + [URL del curso en Udemy](https://www.udemy.com/course/node-de-cero-a-experto)
@@ -2757,15 +2759,305 @@ Iniciar
 
 ### Sección 11: Google Sign in - Front y BackEnd
 #### 151. Introducción a la sección
-2 min
+#### 152. Temas puntuales de la sección
+#### 153. Link para comenzar la integración con Google Sign-in
++ **Autenticación**: 
+    + https://developers.google.com/identity/gsi/web/guides/overview
+
+#### 154. Generar API Key y API Secret de Google
+1. Ir a la consola de Google Cloud: 
+    + https://console.cloud.google.com/projectselector2/apis/dashboard?pli=1&supportedpurview=project
+    + Crear proyecto.
+    + Ir a **Pantalla de consentimiento de OAuth** y seleccionar **Externos**.
+    + Clic en **Crear**.
+    + Completar formulario:
+        + Información de la aplicación:
+            + Nombre: Aplicación para pruebas
+            + Correo: pedro.bazo@sefarvzla.com
+            + Logotipo: campo opcional
+        + Información de contacto del desarrollador:
+            + Correos: pedro.bazo@sefarvzla.com
+        + Clic en **Guardar y continuar**.
+        + En la sección de **Permisos** dar clic en **Guardar y continuar**.
+        + En la sección de **Usuarios de prueba** dar clic en **Guardar y continuar**.
+        + En la sección de **Resumen** dar clic en **Volver al panel**.
+        + 
+    + Ir a **Credenciales** y clic en **CREAR CREDENCIALES** y seleccionar **ID de clientes OAuth 2.0**.
+    + Completar formulario:
+        + Tipo de aplicación: Aplicación web
+        + Nombre: Prueba NodeJS
+        + Orígenes autorizados de JavaScript
+            + Agrar URI:
+                + http://localhost
+                + http://localhost:8082
+        + Clic en **Crear**
+    + Respaldar credenciales: **ID Cliente** y **Secret ID**.
+2. Modificar **09-restserver-2\\.env**:
+    ```env
+    ≡
+    GOOBLE_CLIENT_ID=(ID Cliente)
+    GOOBLE_SECRET_ID=(Secret ID)
+    ```
+
+#### 155. Usuario de Google - Frontend
+1. Modificar **09-restserver-2\public\index.html**:
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Google Sign-in</title>
+    </head>
+    <body>
+        <h1>Google Sign-in</h1>
+        <hr>
+        <div id="g_id_onload"
+            data-client_id="[GOOBLE_CLIENT_ID]"
+            data-auto_prompt="false"
+            data-callback="handleCredentialResponse"
+        >
+        </div>
+        <div class="g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="sign_in_with"
+            data-shape="rectangular"
+            data-logo_alignment="left"
+        >
+        </div>
+
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+        <script>
+            function handleCredentialResponse(response) {
+                // Google token: ID_TOKEN
+                console.log('id_token: ', response.credential);
+            }
+        </script>
+    </body>
+    </html>
+    ```
+
+#### 156. Ruta para manejar autenticación de Google
+1. Modificar **09-restserver-2\routes\auth.js**:
+    ```js
+    ≡
+    const { login, googleSignIn } = require('../controllers/auth')
+    ≡
+    router.post('/login',[
+        ≡
+    ],login )
+
+    router.post('/google',[
+        check('id_token', 'El token de Google es necesario').not().isEmpty(),
+        validarCampos
+    ],googleSignIn )
+    ≡
+    ```
+2. Modificar **09-restserver-2\controllers\auth.js**:
+    ```js
+    ≡
+    ≡
+    ```
+3. Probar end-point:
+    + URL: http://localhost:8082/api/auth/google
+    + Método: POST
+    + Body:
+        ```json
+        {
+            "id_token": "abc123"
+        }
+        ```
+4. Modificar **09-restserver-2\public\index.html**:
+    ```html
+    ≡
+    <body>
+        ≡
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+        <script>
+            function handleCredentialResponse(response) {
+                // Google token: ID_TOKEN
+                // console.log('id_token: ', response.credential);
+
+                const body = { id_token: response.credential }
+
+                fetch('http://localhost:8082/api/auth/google', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                })
+                    .then(resp => resp.json())
+                    .then(resp => {
+                        console.log(resp)
+                    })
+                    .catch(console.warn)
+            }
+        </script>
+    </body>
+    ≡
+    ```
+
+#### 157. Validar Token de Google - Backend
++ Documentación: https://developers.google.com/identity/gsi/web/guides/verify-google-id-token
+1. Instalar dependencia:
+    + $ npm install google-auth-library --save
+2. Crear helper **09-restserver-2\helpers\google-verify.js**:
+    ```js
+    const {OAuth2Client} = require('google-auth-library');
+    const client = new OAuth2Client(process.env.GOOBLE_CLIENT_ID);
+
+    async function googleVerify(token = '') {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOBLE_CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+            // Or, if multiple clients access the backend:
+            //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+        });
+        const { name, picture, email} = ticket.getPayload();
+        return {
+            nombre: name, 
+            img: picture, 
+            correo: email
+        }
+    }
+
+    module.exports = {
+        googleVerify
+    }
+    ```
+3. Modificar controlador **09-restserver-2\controllers\auth.js**:
+    ```js
+    ≡
+    const { generarJWT } = require('../helpers/generar-jwt')
+    const { googleVerify } = require('../helpers/google-verify')
+
+    const login = async(req, res = response) => {
+        ≡
+    }
+
+    const googleSignIn = async (req, res = response) => {
+        const { id_token } = req.body;
+
+        try {
+            const googleUser = await googleVerify(id_token)
+            console.log(googleUser)
+            res.json({
+                msg: 'Todo ok! Google Sign In',
+                id_token
+            })
+        } catch (error) {
+            json.status(400).json({
+                ok: false,
+                msg: 'El token no se pudo verificar'
+            })
+        }
+    }
+
+    module.exports = {
+        login,
+        googleSignIn
+    }
+    ```
+
+#### 158. Crear un usuario personalizado con las credenciales de Google
+1. Modificar controlador **09-restserver-2\controllers\auth.js**:
+    ```js
+    ≡
+    const googleSignIn = async(req, res = response) => {
+        const { id_token } = req.body
+        
+        try {
+            const { correo, nombre, img } = await googleVerify( id_token )
+            let usuario = await Usuario.findOne({ correo })
+
+            if ( !usuario ) {
+                // Tengo que crearlo
+                const data = {
+                    nombre,
+                    correo,
+                    password: ':P',
+                    img,
+                    rol: "USER_ROLE",
+                    google: true
+                };
+
+                usuario = new Usuario( data )
+                await usuario.save()
+            }
+
+            // Si el usuario en DB
+            if ( !usuario.estado ) {
+                return res.status(401).json({
+                    msg: 'Hable con el administrador, usuario bloqueado'
+                })
+            }
+
+            // Generar el JWT
+            const token = await generarJWT( usuario.id )
+            
+            res.json({
+                usuario,
+                token
+            })
+            
+        } catch (error) {
+            res.status(400).json({
+                msg: 'Token de Google no es válido'
+            })
+        }
+    }
+    ≡
+    ```
+
+#### 159. Logout - Google Identity
+1. Modificar **09-restserver-2\public\index.html**:
+    ```html
+    ≡
+    <body>
+        ≡
+        <button id="google_signout">
+            Signout
+        </button>
+
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+        <script>
+            function handleCredentialResponse(response) {
+                ≡
+            }
+
+            // Para finalizar sesión
+            const button = document.getElementById('google_signout')
+            button.onclick = () => {
+                console.log(google.accounts.id)
+                google.accounts.id.disableAutoSelect()
+                
+                google.accounts.id.revoke(localStorage.getItem('email'), done => {
+                    console.log('consent revoked');
+                    localStorage.clear()
+                    location.reload()
+                })
+            }
+        </script>
+    </body>
+    ≡
+    ```
+
+#### 160. Publicar a Heroku - Google SignIn
+#### 161. Pro Tip: Generar la documentación automática de nuestros servicios
+#### 162. Código fuente de la sección
++ **Código fuente**: https://github.com/Klerith/curso-node-restserver/tree/google-signin-updated
+
+
+### Sección 12: Categorías y Productos
+#### 163. Introducción a la sección
+1 min
 Iniciar
-
-
-
-
-
-
-
 
 
 
@@ -2783,93 +3075,57 @@ Iniciar
 
 
 
-#### 152. Temas puntuales de la sección
-1 min
-Iniciar
-#### 153. Link para comenzar la integración con Google Sign-in
+#### 164. Temas puntuales de la sección
 1 min
 Reproducir
-#### 154. Generar API Key y API Secret de Google
-10 min
-Reproducir
-#### 155. Usuario de Google - Frontend
-8 min
-Reproducir
-#### 156. Ruta para manejar autenticación de Google
-8 min
-Reproducir
-#### 157. Validar Token de Google - Backend
-9 min
-Reproducir
-#### 158. Crear un usuario personalizado con las credenciales de Google
-7 min
-Reproducir
-#### 159. Logout - Google Identity
-5 min
-Reproducir
-#### 160. Publicar a Heroku - Google SignIn
-5 min
-Reproducir
-#### 161. Pro Tip: Generar la documentación automática de nuestros servicios
-6 min
-Iniciar
-#### 162. Código fuente de la sección
-1 min
-Reproducir
-
-
-### Sección 12: Categorías y Productos
-163. Introducción a la sección
-1 min
-Iniciar
-164. Temas puntuales de la sección
-1 min
-Reproducir
-165. Continuación de proyecto - Rest Server
+#### 165. Continuación de proyecto - Rest Server
 2 min
 Reproducir
-166. CRUD y rutas de Categorías
+#### 166. CRUD y rutas de Categorías
 11 min
 Reproducir
-167. Modelo Categoria
+#### 167. Modelo Categoria
 6 min
 Reproducir
-168. Crear una categoria
+#### 168. Crear una categoria
 12 min
 Reproducir
-169. Tarea - CRUD de Categorías
+#### 169. Tarea - CRUD de Categorías
 5 min
 Reproducir
-170. Resolución de la tarea - Crud categorías
+#### 170. Resolución de la tarea - Crud categorías
 10 min
 Reproducir
-171. Resolución de la tarea - Crud categorías - Parte 2
+#### 171. Resolución de la tarea - Crud categorías - Parte 2
 12 min
 Reproducir
-172. Modelo de producto y rutas
+#### 172. Modelo de producto y rutas
 8 min
 Reproducir
-173. Resolución de la tarea - CRUD y Rutas de Productos
+#### 173. Resolución de la tarea - CRUD y Rutas de Productos
 18 min
 Reproducir
-174. Ruta para realizar búsquedas
+#### 174. Ruta para realizar búsquedas
 7 min
 Reproducir
-175. Búsquedas en base de datos
+#### 175. Búsquedas en base de datos
 10 min
 Reproducir
-176. Buscar por otros argumentos
+#### 176. Buscar por otros argumentos
 8 min
 Reproducir
-177. Buscar en otras colecciones
+#### 177. Buscar en otras colecciones
 8 min
 Reproducir
-178. Desplegar en Heroku
+#### 178. Desplegar en Heroku
 5 min
 Iniciar
-179. Código fuente de la sección
+#### 179. Código fuente de la sección
 1 min
 Reproducir
+
+
+### Sección 13: Carga de archivos y protección de los mismos
 180. Introducción a la sección
 3 min
 Iniciar
