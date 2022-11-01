@@ -3056,7 +3056,30 @@ Iniciar
 
 ### Sección 12: Categorías y Productos
 #### 163. Introducción a la sección
-1 min
+#### 164. Temas puntuales de la sección
+#### 165. Continuación de proyecto - Rest Server
+#### 166. CRUD y rutas de Categorías
+#### 167. Modelo Categoria
+#### 168. Crear una categoria
+#### 169. Tarea - CRUD de Categorías
+#### 170. Resolución de la tarea - Crud categorías
+#### 171. Resolución de la tarea - Crud categorías - Parte 2
+#### 172. Modelo de producto y rutas
+#### 173. Resolución de la tarea - CRUD y Rutas de Productos
+#### 174. Ruta para realizar búsquedas
+#### 175. Búsquedas en base de datos
+#### 176. Buscar por otros argumentos
+#### 177. Buscar en otras colecciones
+#### 178. Desplegar en Heroku
+#### 179. Código fuente de la sección
++ **Código fuente**: 
+    + https://github.com/Klerith/curso-node-restserver/releases/tag/v4.0.0
+    + recursos\curso-node-restserver-4.0.0.zip
+
+
+### Sección 13: Carga de archivos y protección de los mismos
+#### 180. Introducción a la sección
+3 min
 Iniciar
 
 
@@ -3075,114 +3098,63 @@ Iniciar
 
 
 
-#### 164. Temas puntuales de la sección
+#### 181. Temas puntuales de la sección
 1 min
 Reproducir
-#### 165. Continuación de proyecto - Rest Server
-2 min
-Reproducir
-#### 166. CRUD y rutas de Categorías
-11 min
-Reproducir
-#### 167. Modelo Categoria
+#### 182. Continuación del proyecto - RestServer
 6 min
 Reproducir
-#### 168. Crear una categoria
-12 min
-Reproducir
-#### 169. Tarea - CRUD de Categorías
-5 min
-Reproducir
-#### 170. Resolución de la tarea - Crud categorías
-10 min
-Reproducir
-#### 171. Resolución de la tarea - Crud categorías - Parte 2
-12 min
-Reproducir
-#### 172. Modelo de producto y rutas
-8 min
-Reproducir
-#### 173. Resolución de la tarea - CRUD y Rutas de Productos
-18 min
-Reproducir
-#### 174. Ruta para realizar búsquedas
-7 min
-Reproducir
-#### 175. Búsquedas en base de datos
-10 min
-Reproducir
-#### 176. Buscar por otros argumentos
-8 min
-Reproducir
-#### 177. Buscar en otras colecciones
-8 min
-Reproducir
-#### 178. Desplegar en Heroku
-5 min
-Iniciar
-#### 179. Código fuente de la sección
-1 min
-Reproducir
-
-
-### Sección 13: Carga de archivos y protección de los mismos
-180. Introducción a la sección
-3 min
-Iniciar
-181. Temas puntuales de la sección
-1 min
-Reproducir
-182. Continuación del proyecto - RestServer
-6 min
-Reproducir
-183. Subir archivos
+#### 183. Subir archivos
 13 min
 Reproducir
-184. Validar la extensión
+#### 184. Validar la extensión
 6 min
 Reproducir
-185. Ubicar y cambiar nombre
+#### 185. Ubicar y cambiar nombre
 4 min
 Reproducir
-186. Helper - SubirArchivo
+#### 186. Helper - SubirArchivo
 11 min
 Reproducir
-187. Crear carpetas de destino
+#### 187. Crear carpetas de destino
 7 min
 Reproducir
-188. Ruta para actualizar imágenes de Usuarios y Productos
+#### 188. Ruta para actualizar imágenes de Usuarios y Productos
 10 min
 Reproducir
-189. Actualizar imagen de usuario
+#### 189. Actualizar imagen de usuario
 10 min
 Reproducir
-190. Resolución de la tarea - Desestructurar de undefined
+#### 190. Resolución de la tarea - Desestructurar de undefined
 5 min
 Reproducir
-191. Borrar archivos del servidor
+#### 191. Borrar archivos del servidor
 6 min
 Reproducir
-192. Servicio para mostrar las imágenes
+#### 192. Servicio para mostrar las imágenes
 9 min
 Reproducir
-193. Mostrar imagen de relleno
+#### 193. Mostrar imagen de relleno
 8 min
 Reproducir
-194. Cloudinary - Servicio para imágenes y videos
+#### 194. Cloudinary - Servicio para imágenes y videos
 5 min
 Reproducir
-195. Carga de imágenes a Cloudinary
+#### 195. Carga de imágenes a Cloudinary
 9 min
 Reproducir
-196. Borrar imágenes de Cloudinary
+#### 196. Borrar imágenes de Cloudinary
 5 min
 Reproducir
-197. Desplegar en Heroku
+#### 197. Desplegar en Heroku
 4 min
 Iniciar
-198. Código fuente de la sección
+#### 198. Código fuente de la sección
 1 min
 Reproducir
+
+
+### Sección 14: Sockets - Fundamentos de los sockets
 199. Introducción a la sección
 3 min
 Iniciar
