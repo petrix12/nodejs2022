@@ -3079,7 +3079,51 @@ Iniciar
 
 ### Sección 13: Carga de archivos y protección de los mismos
 #### 180. Introducción a la sección
-3 min
+#### 181. Temas puntuales de la sección
+#### 182. Continuación del proyecto - RestServer
+#### 183. Subir archivos
+#### 184. Validar la extensión
+#### 185. Ubicar y cambiar nombre
+#### 186. Helper - SubirArchivo
+#### 187. Crear carpetas de destino
+#### 188. Ruta para actualizar imágenes de Usuarios y Productos
+#### 189. Actualizar imagen de usuario
+#### 190. Resolución de la tarea - Desestructurar de undefined
+#### 191. Borrar archivos del servidor
+#### 192. Servicio para mostrar las imágenes
+#### 193. Mostrar imagen de relleno
+#### 194. Cloudinary - Servicio para imágenes y videos
+#### 195. Carga de imágenes a Cloudinary
+#### 196. Borrar imágenes de Cloudinary
+#### 197. Desplegar en Heroku
+#### 198. Código fuente de la sección
++ **Código fuente**:
+    + https://github.com/Klerith/curso-node-restserver/releases/tag/v5.0.0
+    + recursos\curso-node-restserver-5.0.0.zip
+
+
+### Sección 14: Sockets - Fundamentos de los sockets
+#### 199. Introducción a la sección
+#### 200. Temas puntuales de la sección
+#### 201. ¿Qué son los sockets y para qué nos pueden servir?
+#### 202. Inicio del proyecto - Fundamentos sobre Web Sockets
+#### 203. Instalación de socket.io
+#### 204. Configuración de socket.io - Front-End
+#### 205. Mensajes de conexión y desconexión - Cliente
+#### 206. Emitir desde el cliente - Escuchar en el servidor
+#### 207. Emitir desde el servidor - Escuchar en el cliente
+#### 208. Retroalimentación de emisiones del cliente hacia el servidor
+#### 209. Broadcast - Ordenar nuestro código
+#### 210. Sockets a Heroku
+#### 211. Código fuente de la sección
++ **Código fuente**:
+    + https://github.com/Klerith/curso-node-socket-server-basico/tree/main
+    + recursos\curso-node-socket-server-basico-main.zip
+
+
+### Sección 15: Sockets - Aplicación de Cola
+#### 212. Introducción a la sección
+2 min
 Iniciar
 
 
@@ -3098,138 +3142,43 @@ Iniciar
 
 
 
-#### 181. Temas puntuales de la sección
+#### 213. Temas puntuales de la sección
 1 min
 Reproducir
-#### 182. Continuación del proyecto - RestServer
-6 min
+#### 214. Inicio de proyecto - Aplicación de Colas
+5 min
 Reproducir
-#### 183. Subir archivos
-13 min
+#### 215. Clase para centralizar la lógica de los tickets
+12 min
 Reproducir
-#### 184. Validar la extensión
-6 min
+#### 216. Modelo - Siguiente y atender nuevo ticket
+9 min
 Reproducir
-#### 185. Ubicar y cambiar nombre
-4 min
-Reproducir
-#### 186. Helper - SubirArchivo
+#### 217. Socket: Siguiente Ticket
 11 min
 Reproducir
-#### 187. Crear carpetas de destino
-7 min
-Reproducir
-#### 188. Ruta para actualizar imágenes de Usuarios y Productos
-10 min
-Reproducir
-#### 189. Actualizar imagen de usuario
-10 min
-Reproducir
-#### 190. Resolución de la tarea - Desestructurar de undefined
-5 min
-Reproducir
-#### 191. Borrar archivos del servidor
+#### 218. Preparar pantalla de escritorio
 6 min
 Reproducir
-#### 192. Servicio para mostrar las imágenes
+#### 219. Socket: Atender un ticket
+12 min
+Reproducir
+#### 220. Mostrar cola de tickets en pantalla
 9 min
 Reproducir
-#### 193. Mostrar imagen de relleno
-8 min
-Reproducir
-#### 194. Cloudinary - Servicio para imágenes y videos
-5 min
-Reproducir
-#### 195. Carga de imágenes a Cloudinary
+#### 221. Tarea - Tickets pendientes por atender
 9 min
 Reproducir
-#### 196. Borrar imágenes de Cloudinary
-5 min
-Reproducir
-#### 197. Desplegar en Heroku
+#### 222. Reproducir audio cuando se asigna un ticket
 4 min
 Iniciar
-#### 198. Código fuente de la sección
+#### 223. Código fuente de la sección
 1 min
 Reproducir
 
 
-### Sección 14: Sockets - Fundamentos de los sockets
-199. Introducción a la sección
-3 min
-Iniciar
-200. Temas puntuales de la sección
-1 min
-Reproducir
-201. ¿Qué son los sockets y para qué nos pueden servir?
-4 min
-Reproducir
-202. Inicio del proyecto - Fundamentos sobre Web Sockets
-9 min
-Reproducir
-203. Instalación de socket.io
-8 min
-Reproducir
-204. Configuración de socket.io - Front-End
-8 min
-Reproducir
-205. Mensajes de conexión y desconexión - Cliente
-7 min
-Reproducir
-206. Emitir desde el cliente - Escuchar en el servidor
-7 min
-Reproducir
-207. Emitir desde el servidor - Escuchar en el cliente
-7 min
-Reproducir
-208. Retroalimentación de emisiones del cliente hacia el servidor
-5 min
-Reproducir
-209. Broadcast - Ordenar nuestro código
-7 min
-Reproducir
-210. Sockets a Heroku
-8 min
-Iniciar
-211. Código fuente de la sección
-1 min
-Reproducir
-212. Introducción a la sección
-2 min
-Iniciar
-213. Temas puntuales de la sección
-1 min
-Reproducir
-214. Inicio de proyecto - Aplicación de Colas
-5 min
-Reproducir
-215. Clase para centralizar la lógica de los tickets
-12 min
-Reproducir
-216. Modelo - Siguiente y atender nuevo ticket
-9 min
-Reproducir
-217. Socket: Siguiente Ticket
-11 min
-Reproducir
-218. Preparar pantalla de escritorio
-6 min
-Reproducir
-219. Socket: Atender un ticket
-12 min
-Reproducir
-220. Mostrar cola de tickets en pantalla
-9 min
-Reproducir
-221. Tarea - Tickets pendientes por atender
-9 min
-Reproducir
-222. Reproducir audio cuando se asigna un ticket
-4 min
-Iniciar
-223. Código fuente de la sección
-1 min
-Reproducir
+
+### Sección 16: Sockets con autenticación
 224. Introducción a la sección
 2 min
 Iniciar
