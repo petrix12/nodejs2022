@@ -3123,6 +3123,25 @@ Iniciar
 
 ### Sección 15: Sockets - Aplicación de Cola
 #### 212. Introducción a la sección
+#### 213. Temas puntuales de la sección
+#### 214. Inicio de proyecto - Aplicación de Colas
+#### 215. Clase para centralizar la lógica de los tickets
+#### 216. Modelo - Siguiente y atender nuevo ticket
+#### 217. Socket: Siguiente Ticket
+#### 218. Preparar pantalla de escritorio
+#### 219. Socket: Atender un ticket
+#### 220. Mostrar cola de tickets en pantalla
+#### 221. Tarea - Tickets pendientes por atender
+#### 222. Reproducir audio cuando se asigna un ticket
+#### 223. Código fuente de la sección
++ **Código fuente**:
+    + https://github.com/Klerith/node-curso-socket-colas
+    + recursos\seccion15\node-curso-socket-colas-main.zip
+
+
+
+### Sección 16: Sockets con autenticación
+#### 224. Introducción a la sección
 2 min
 Iniciar
 
@@ -3142,91 +3161,54 @@ Iniciar
 
 
 
-#### 213. Temas puntuales de la sección
+#### 225. Temas puntuales de la sección
 1 min
 Reproducir
-#### 214. Inicio de proyecto - Aplicación de Colas
-5 min
-Reproducir
-#### 215. Clase para centralizar la lógica de los tickets
-12 min
-Reproducir
-#### 216. Modelo - Siguiente y atender nuevo ticket
-9 min
-Reproducir
-#### 217. Socket: Siguiente Ticket
-11 min
-Reproducir
-#### 218. Preparar pantalla de escritorio
-6 min
-Reproducir
-#### 219. Socket: Atender un ticket
-12 min
-Reproducir
-#### 220. Mostrar cola de tickets en pantalla
-9 min
-Reproducir
-#### 221. Tarea - Tickets pendientes por atender
-9 min
-Reproducir
-#### 222. Reproducir audio cuando se asigna un ticket
-4 min
-Iniciar
-#### 223. Código fuente de la sección
-1 min
-Reproducir
-
-
-
-### Sección 16: Sockets con autenticación
-224. Introducción a la sección
-2 min
-Iniciar
-225. Temas puntuales de la sección
-1 min
-Reproducir
-226. Inicio de proyecto - SocketChat
+#### 226. Inicio de proyecto - SocketChat
 7 min
 Reproducir
-227. Configurar Socket.io
+#### 227. Configurar Socket.io
 10 min
 Reproducir
-228. Diseño del login y su funcionamiento
+#### 228. Diseño del login y su funcionamiento
 14 min
 Reproducir
-229. Validar el JWT - Servicio
+#### 229. Validar el JWT - Servicio
 6 min
 Reproducir
-230. Validar Token - Frontend
+#### 230. Validar Token - Frontend
 8 min
 Reproducir
-231. Validar socket con JWT - Backend
+#### 231. Validar socket con JWT - Backend
 12 min
 Reproducir
-232. HTML y JS que usaremos
+#### 232. HTML y JS que usaremos
 8 min
 Reproducir
-233. Modelo para el manejo de usuarios conectados y mensajes
+#### 233. Modelo para el manejo de usuarios conectados y mensajes
 7 min
 Reproducir
-234. Listado de usuarios conectados
+#### 234. Listado de usuarios conectados
 8 min
 Reproducir
-235. Mostar en el HTML los usuarios conectados
+#### 235. Mostar en el HTML los usuarios conectados
 5 min
 Reproducir
-236. Envío de mensajes a toda la sala de chat
+#### 236. Envío de mensajes a toda la sala de chat
 8 min
 Reproducir
-237. Historial de mensajes en el HTML
+#### 237. Historial de mensajes en el HTML
 6 min
 Reproducir
-238. Mensajes privados
+#### 238. Mensajes privados
 9 min
 Iniciar
-239. Código fuente de la sección
+#### 239. Código fuente de la sección
 1 min
 Iniciar
+
+
+### Sección 17: Bonus: Node + TypeScript + MySQL
 240. Temas de la sección
 1 min
 Reproducir
