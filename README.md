@@ -3142,8 +3142,30 @@ Iniciar
 
 ### Sección 16: Sockets con autenticación
 #### 224. Introducción a la sección
-2 min
-Iniciar
+#### 225. Temas puntuales de la sección
+#### 226. Inicio de proyecto - SocketChat
+#### 227. Configurar Socket.io
+#### 228. Diseño del login y su funcionamiento
+#### 229. Validar el JWT - Servicio
+#### 230. Validar Token - Frontend
+#### 231. Validar socket con JWT - Backend
+#### 232. HTML y JS que usaremos
+#### 233. Modelo para el manejo de usuarios conectados y mensajes
+#### 234. Listado de usuarios conectados
+#### 235. Mostar en el HTML los usuarios conectados
+#### 236. Envío de mensajes a toda la sala de chat
+#### 237. Historial de mensajes en el HTML
+#### 238. Mensajes privados
+#### 239. Código fuente de la sección
++ **Código fuente**:
+    + https://github.com/Klerith/curso-node-socket-chat
+    + recursos\seccion16\curso-node-socket-chat-main.zip
+
+
+### Sección 17: Bonus: Node + TypeScript + MySQL
+#### 240. Temas de la sección
+1 min
+Reproducir
 
 
 
@@ -3161,152 +3183,108 @@ Iniciar
 
 
 
-#### 225. Temas puntuales de la sección
-1 min
+#### 241. Inicio de proyecto - ts-rest-server
+9 min
 Reproducir
-#### 226. Inicio de proyecto - SocketChat
-7 min
-Reproducir
-#### 227. Configurar Socket.io
+#### 242. Crear el servidor de express y sus middlewares
 10 min
 Reproducir
-#### 228. Diseño del login y su funcionamiento
-14 min
-Reproducir
-#### 229. Validar el JWT - Servicio
+#### 243. Nodemon y TSC --watch
 6 min
 Reproducir
-#### 230. Validar Token - Frontend
-8 min
+#### 244. Rutas de mi aplicación
+13 min
 Reproducir
-#### 231. Validar socket con JWT - Backend
-12 min
+#### 245. Middlewares necesarios
+6 min
 Reproducir
-#### 232. HTML y JS que usaremos
-8 min
-Reproducir
-#### 233. Modelo para el manejo de usuarios conectados y mensajes
+#### 246. MySQL - Instalaciones y conexión
 7 min
 Reproducir
-#### 234. Listado de usuarios conectados
+#### 247. Tabla de Usuarios
+4 min
+Reproducir
+#### 248. Sequelize
 8 min
 Reproducir
-#### 235. Mostar en el HTML los usuarios conectados
-5 min
+#### 249. Modelo de Usuario
+4 min
 Reproducir
-#### 236. Envío de mensajes a toda la sala de chat
-8 min
+#### 250. Obtener Usuarios
+7 min
 Reproducir
-#### 237. Historial de mensajes en el HTML
-6 min
-Reproducir
-#### 238. Mensajes privados
+#### 251. Crear y actualizar usuarios
 9 min
+Reproducir
+#### 252. Eliminar registros
+5 min
 Iniciar
-#### 239. Código fuente de la sección
+#### 253. Código fuente de la sección
 1 min
 Iniciar
 
 
-### Sección 17: Bonus: Node + TypeScript + MySQL
-240. Temas de la sección
+
+### Sección 18: Despedida del curso
+#### 254. Más sobre mis cursos
++ https://fernando-herrera.com/#/cursos-gratis
++ https://fernando-herrera.com/#/home
++ https://fernando-herrera.com/#/logros
+
+#### 255. Cierre del curso
+
+
+### Sección 19: Socket Chat 
+#### 256. Temas puntuales de la sección
 1 min
 Reproducir
-241. Inicio de proyecto - ts-rest-server
-9 min
-Reproducir
-242. Crear el servidor de express y sus middlewares
-10 min
-Reproducir
-243. Nodemon y TSC --watch
-6 min
-Reproducir
-244. Rutas de mi aplicación
-13 min
-Reproducir
-245. Middlewares necesarios
-6 min
-Reproducir
-246. MySQL - Instalaciones y conexión
-7 min
-Reproducir
-247. Tabla de Usuarios
-4 min
-Reproducir
-248. Sequelize
-8 min
-Reproducir
-249. Modelo de Usuario
-4 min
-Reproducir
-250. Obtener Usuarios
-7 min
-Reproducir
-251. Crear y actualizar usuarios
-9 min
-Reproducir
-252. Eliminar registros
-5 min
-Iniciar
-253. Código fuente de la sección
-1 min
-Iniciar
-254. Más sobre mis cursos
-1 min
-Reproducir
-255. Cierre del curso
-5 min
-Iniciar
-256. Temas puntuales de la sección
-1 min
-Reproducir
-257. Inicio del proyecto - Socket Chat
+#### 257. Inicio del proyecto - Socket Chat
 3 min
 Reproducir
-258. Clase para controlar los usuarios del chat
+#### 258. Clase para controlar los usuarios del chat
 11 min
 Reproducir
-259. Front-End: Conectar un usuario
+#### 259. Front-End: Conectar un usuario
 11 min
 Reproducir
-260. Desconectar usuarios
+#### 260. Desconectar usuarios
 8 min
 Reproducir
-261. Enviando un mensaje a todo el grupo
+#### 261. Enviando un mensaje a todo el grupo
 8 min
 Reproducir
-262. Enviar un mensaje a un usuario en específico
+#### 262. Enviar un mensaje a un usuario en específico
 6 min
 Reproducir
-263. Salas de Chat
+#### 263. Salas de Chat
 8 min
 Reproducir
-264. Mensajes y notificaciones a las salas de chat
+#### 264. Mensajes y notificaciones a las salas de chat
 9 min
 Reproducir
-265. Respaldo a GitHub de nuestra aplicación de Chat
+#### 265. Respaldo a GitHub de nuestra aplicación de Chat
 2 min
 Reproducir
-266. Diseño de nuestra sala de chat
+#### 266. Diseño de nuestra sala de chat
 4 min
 Reproducir
-267. Renderizar usuarios
+#### 267. Renderizar usuarios
 10 min
 Reproducir
-268. Obtener el ID del usuario conectado
+#### 268. Obtener el ID del usuario conectado
 3 min
 Reproducir
-269. Enviar y renderizar mensajes
+#### 269. Enviar y renderizar mensajes
 13 min
 Reproducir
-270. Mejorar la forma de renderizar mensajes
+#### 270. Mejorar la forma de renderizar mensajes
 11 min
 Reproducir
-271. Propuestas para ejercicios del chat
+#### 271. Propuestas para ejercicios del chat
 1 min
 Reproducir
-272. Subir cambios a GitHub - SocketChat
+#### 272. Subir cambios a GitHub - SocketChat
 2 min
 Iniciar
-273. Código fuente de la sección
+#### 273. Código fuente de la sección
 1 min
